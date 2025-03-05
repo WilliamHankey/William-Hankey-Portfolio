@@ -15,6 +15,9 @@ export default function RootLayout({
     <html
       lang="en"
     >
+      <head>
+        <script src="https://cdn.tailwindcss.com"></script>
+      </head>
       <body suppressHydrationWarning={true} className="antialiased w-full mx-4 lg:mx-auto">
         <main className="flex-auto min-w-0  flex flex-col px-2 md:px-0">
           <Navbar />

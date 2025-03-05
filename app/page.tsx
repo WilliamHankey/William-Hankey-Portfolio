@@ -5,6 +5,8 @@ import {Navbar} from "./components/Navbar";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import About from "./components/About";
+import Quote from "./components/Quote";
+import Testimonials from "./components/Testimonials";
 
 export default function Home() {
   return (
@@ -33,9 +35,14 @@ export default function Home() {
       <div className="w-full">
         <About />
       </div>
-
+      <div className="w-full">
+        <Quote />
+      </div>
       <div className="w-full">
         <Projects />
+      </div>
+      <div className="w-full">
+        <Testimonials />
       </div>
    
     </section>
