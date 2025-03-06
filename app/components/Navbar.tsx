@@ -32,7 +32,7 @@ export function Navbar() {
           <div className='flex flex-row relative w-full justify-end'>
             <div className='fixed top-0 left-0  flex flex-col justify-between items-top flex-wrap shadow-md z-10 p-2' style={{height:"100vh", maxWidth:"4%"}}>
               <Image className="w-12" src="/assests/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
-              <div className='rotate-270 text-center h-auto w-full text-nowrap content-center justify-center flex-wrap flex flex-col align-center'>
+              <div className='-rotate-90 text-center h-auto w-full text-nowrap content-center justify-center flex-wrap flex flex-col align-center'>
                 <h1 className='text-2xl font-bold tracking-tighter'>WILLIAM HANKEY</h1>
                 <p className='text-sm'>PRODUCT DESIGNER</p>
               </div>
