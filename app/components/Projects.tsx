@@ -6,7 +6,7 @@ export default function Projects() {
   const projects = getProjects();
 
   return (
-    <section className="grid grid-cols-1 gap-24 p-24">
+    <section id="work" className="grid grid-cols-1 gap-24 p-24">
     {projects.map((project, index) => (
       <Link key={project.slug} href={`/projects/${project.slug}`} className="block w-full">
         {/* ✅ Apply `odd:flex-row-reverse` to the wrapping div */}

@@ -3,25 +3,24 @@
 import Link from 'next/link'
 import Image from "next/image";
 
+
 const navItems = {
-  '/About': {
-    name: 'About',
-  },
-  '/Work': {
-    name: 'Work',
-  },
-  '/Testimonials': {
-    name: 'Testimonials',
-  },
-  '/contact': {
-    name: 'Contact',
-  },
-  'https://vercel.com/templates/next.js/portfolio-starter-kit': {
-    name: 'Download CV',
-  },
-}
+  "/#about": { name: "About" },
+  "/#work": { name: "Work" },
+  "/#testimonials": { name: "Testimonials" },
+  "/#contact": { name: "Contact" },
+  "https://vercel.com/templates/next.js/portfolio-starter-kit": { name: "Download CV" },
+};
 
 export function Navbar() {
+  const handleScroll = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
+    event.preventDefault();
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <aside className="-ml-[8px]  tracking-tight">
       <div className="lg:sticky lg:top-20">
@@ -41,7 +40,18 @@ export function Navbar() {
             
             <div className="flex flex-row space-x-0 p-3 fixed shadow-md w-full justify-end bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               {Object.entries(navItems).map(([path, { name }]) => {
-                return (
+                const isInternal = path.startsWith("/#");
+
+                return isInternal ? (
+                  <a
+                    key={path}
+                    href={path}
+                    onClick={(e) => handleScroll(e, path.replace("/#", ""))}
+                    className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-1 px-2 m-1 cursor-pointer"
+                  >
+                    {name}
+                  </a>
+                ) : (
                   <Link
                     key={path}
                     href={path}
@@ -49,7 +59,7 @@ export function Navbar() {
                   >
                     {name}
                   </Link>
-                )
+                );
               })}
             </div>
           </div>
