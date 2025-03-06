@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 import Footer from "./components/Footer"
 import { Navbar } from "./components/Navbar"
+import { unstable_ViewTransition as ViewTransition } from "react"
 
 export const metadata: Metadata = {
 
@@ -21,7 +22,8 @@ export default function RootLayout({
       <body suppressHydrationWarning={true} className="antialiased w-full mx-4 lg:mx-auto">
         <main className="flex-auto min-w-0  flex flex-col px-2 md:px-0">
           <Navbar />
-          {children}
+          <ViewTransition> {children} </ViewTransition>
+         
           <Footer />
         </main>
       </body>
