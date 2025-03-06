@@ -12,7 +12,7 @@ const testimonials: Record<
     info: "Colleague",
   },
   antonio: {
-    name: "Antonio",
+    name: "Antonioo",
     image: "/assets/logos/css.svg", // ✅ Fixed path
     description:
       "“Job well done! I am really impressed. He is very very good at what he does:) I would recommend Sagar and will rehire in the future for Frontend development.”",
