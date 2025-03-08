@@ -30,6 +30,24 @@ export function getProjects() {
         description: "A modern e-commerce platform with seamless UI/UX.",
         image: "/assets/projects/reguhub.png",
         icons: ["devicon-nextjs-original", "devicon-tailwindcss-plain"],
+        link: "https://reguhub.vercel.app/",
+        showcase: [
+          {
+            image: "/assets/projects/synergyflow/tasks.svg",
+            title: "Task Management",
+            description: "Organize, assign, and track tasks efficiently with an intuitive interface."
+          },
+          {
+            image: "/assets/projects/synergyflow/chat.svg",
+            title: "Team Communication",
+            description: "Built-in real-time chat to enhance collaboration and productivity."
+          },
+          {
+            image: "/assets/projects/synergyflow/projects.svg",
+            title: "Project Dashboard",
+            description: "Monitor project progress, deadlines, and analytics all in one place."
+          }
+        ],
       },
       {
         slug: "commerce-app",

@@ -1,12 +1,9 @@
-import Image from "next/image";
-import Footer from "./components/Footer";
-import Hero from "./components/Header";
-import {Navbar} from "./components/Navbar";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import About from "./components/About";
 import Quote from "./components/Quote";
 import Testimonials from "./components/Testimonials";
+import Contact from "./components/Contact";
 
 export default function Home() {
   return (
@@ -44,7 +41,9 @@ export default function Home() {
       <div className="w-full">
         <Testimonials />
       </div>
-   
+      <div className="w-full">
+        <Contact />
+      </div>
     </section>
   );
 }
