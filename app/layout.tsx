@@ -18,6 +18,7 @@ export default function RootLayout({
     >
       <head>
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/tabs.js"></script>
       </head>
       <body suppressHydrationWarning={true} className="antialiased w-full mx-4 lg:mx-auto">
         <main className="flex-auto min-w-0  flex flex-col px-2 md:px-0">

@@ -1,39 +1,39 @@
 const skillLogos: Record<string, { name: string }> = {
     html: {
-      name: "../assests/logos/html.svg",
+      name: "../assets/logos/html.svg",
     },
     css: {
-      name: "../assests/logos/css.svg",
+      name: "../assets/logos/css.svg",
     },
     javascript: {
-      name: "../assests/logos/javascript.svg",
+      name: "../assets/logos/javascript.svg",
     },
     typescript: {
-      name: "../assests/logos/typescript.svg",
+      name: "../assets/logos/typescript.svg",
     },
     react: {
-      name: "../assests/logos/react.svg",
+      name: "../assets/logos/react.svg",
     },
     angular: {
-      name: "../assests/logos/angular.svg",
+      name: "../assets/logos/angular.svg",
     },
     vue: {
-      name: "../assests/logos/vue.svg",
+      name: "../assets/logos/vue.svg",
     },
     tailwind: {
-      name: "../assests/logos/tailwind.svg",
+      name: "../assets/logos/tailwind.svg",
     },
     mongo: {
-      name: "../assests/logos/mongo.svg",
+      name: "../assets/logos/mongo.svg",
     },
     sql: {
       name: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/microsoftsqlserver/microsoftsqlserver-original-wordmark.svg",
     },
     figma: {
-      name: "../assests/logos/figma.svg",
+      name: "../assets/logos/figma.svg",
     },
     git: {
-      name: "../assests/logos/git.svg",
+      name: "../assets/logos/git.svg",
     },
   };
   

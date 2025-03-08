@@ -23,11 +23,11 @@ export default function Home() {
           </p>
         </div>
         <div className='px-40'>
-          <img src='../assests/company-logo.svg'></img>
+          <img src='../assets/company-logo.svg'></img>
         </div>
       </div>
       <div className='w-1/2'>
-        <img src='../assests/heroImage.png'></img>
+        <img src='../assets/heroImage.png'></img>
       </div>
       <div className="w-full">
         <Skills />

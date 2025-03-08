@@ -30,12 +30,12 @@ export function Navbar() {
         >
           <div className='flex flex-row relative w-full justify-end'>
             <div className='fixed top-0 left-0  flex flex-col justify-between items-top flex-wrap shadow-md z-10 p-2' style={{height:"100vh", maxWidth:"4%"}}>
-              <Image className="w-12" src="/assests/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
+              <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
               <div className='-rotate-90 text-center h-auto w-full text-nowrap content-center justify-center flex-wrap flex flex-col align-center'>
                 <h1 className='text-2xl font-bold tracking-tighter'>WILLIAM HANKEY</h1>
                 <p className='text-sm'>PRODUCT DESIGNER</p>
               </div>
-              <Image className="w-12" src="/assests/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
+              <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
             </div>
             
             <div className="flex flex-row space-x-0 p-3 fixed shadow-md w-full justify-end bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
