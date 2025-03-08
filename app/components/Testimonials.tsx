@@ -29,7 +29,12 @@ const testimonials: Record<
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="grid grid-cols-3 gap-24 p-24">
+    <section id="testimonials" className="bg-grey-100 flex flex-col justify-center items-center bg-gray-100 py-24 px-16">
+      <div className="rounded-md bg-gradient-to-tr from-slate-800 to-slate-700 py-0.5 px-2.5 border border-transparent text-sm text-white transition-all shadow-sm w-fit">
+        Testimonials
+      </div>
+      <p>Nice things people have to say about me.</p>
+      <div className="grid grid-cols-3 gap-24 p-8">
       {Object.entries(testimonials).map(([key, value]) => (
         <div
           key={key} // ✅ Added unique key here
@@ -51,6 +56,7 @@ export default function Testimonials() {
           </div>
         </div>
       ))}
+      </div>
     </section>
   );
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getProjects } from "../pages/projects/[slug]/data";
+import { getProjects } from "../projects/[slug]/data";
 
 export default function Projects() {
   const projects = getProjects();
