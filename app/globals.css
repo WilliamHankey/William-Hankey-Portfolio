@@ -44,8 +44,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
-.bg-primary {
-  background-color: var(--color-primary);
+.bg-quote {
+  background-color: #2C2B3E;
 }
 
 body, p, span, div, a, button, input, textarea {

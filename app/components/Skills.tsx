@@ -39,7 +39,7 @@ const skillLogos: Record<string, { name: string }> = {
   
   export default function Skills() {
     return (
-      <section style={{background: '#F9FAFB'}} className="text-center p-20">
+      <section style={{background: '#F9FAFB'}} className="text-center p-20 w-full">
         <h1 className="mb-8 text-2xl font-semibold tracking-tighter">Skills</h1>
         <p className="mb-4">
           The skills, tools, and technologies I am really good at:

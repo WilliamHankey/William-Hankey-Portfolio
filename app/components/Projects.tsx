@@ -1,8 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useTransition } from "react";
 import { getProjects } from "../projects/[slug]/data";
 
 export default function Projects() {
+  const [isPending, startTransition] = useTransition();
   const projects = getProjects();
 
   return (

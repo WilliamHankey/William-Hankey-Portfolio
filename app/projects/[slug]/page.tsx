@@ -32,7 +32,12 @@ export default function ProjectDetail() {
   }
 
   return (
-    <section className="ml-32 px-48 py-16">
+    <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+  >
+      <section className="ml-32 px-48 py-16">
       <div className="flex flex-row gap-8 mt-6 " >
           <div className="w-1/2 ">   
           <div className="w-full border rounded-lg shadow-lg overflow-hidden">
@@ -221,6 +226,8 @@ export default function ProjectDetail() {
       </div>
 
     </section>
+  </motion.div>
+  
   );
 }
 
