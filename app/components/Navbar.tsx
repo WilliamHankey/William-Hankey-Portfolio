@@ -118,33 +118,53 @@ export function Navbar() {
               transition={{ type: "spring", damping: 20 }}
               className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 lg:hidden"
             >
-              <div className="flex flex-col p-4 space-y-4 mt-16">
-                {Object.entries(navItems).map(([path, { name, isCta }]) => {
-                  const isInternal = path.startsWith("/#");
-                  return isInternal ? (
-                    <a
-                      key={path}
-                      href={path}
-                      onClick={(e) => handleScroll(e, path.replace("/#", ""))}
-                      className="transition-all hover:text-[#2C2B3E] py-2 px-4"
-                    >
-                      {name}
-                    </a>
-                  ) : (
-                    <a
-                      key={path}
-                      href={path}
-                      onClick={handleDownload}
-                      className={`transition-all py-2 px-4 ${
-                        isCta 
-                          ? "bg-[#2C2B3E] text-white rounded-md hover:bg-[#2C2B3E]/90" 
-                          : "hover:text-[#2C2B3E]"
-                      }`}
-                    >
-                      {name}
-                    </a>
-                  );
-                })}
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between p-4 border-b">
+                  <div className="flex items-center space-x-3">
+                    <Image className="w-8" src="/assets/wordmark.svg" alt="Wordmark Logo" width={32} height={32} />
+                    <div>
+                      <h1 className="text-sm font-bold tracking-tighter">WILLIAM HANKEY</h1>
+                      <p className="text-xs text-gray-500">PRODUCT ENGINEER</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => setIsMenuOpen(false)}
+                    className="p-2 rounded-md hover:bg-gray-100"
+                    aria-label="Close menu"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="flex-1 p-4 space-y-4">
+                  {Object.entries(navItems).map(([path, { name, isCta }]) => {
+                    const isInternal = path.startsWith("/#");
+                    return isInternal ? (
+                      <a
+                        key={path}
+                        href={path}
+                        onClick={(e) => handleScroll(e, path.replace("/#", ""))}
+                        className="transition-all hover:text-[#2C2B3E] py-2 px-4 block"
+                      >
+                        {name}
+                      </a>
+                    ) : (
+                      <a
+                        key={path}
+                        href={path}
+                        onClick={handleDownload}
+                        className={`transition-all py-2 px-4 block ${
+                          isCta 
+                            ? "bg-[#2C2B3E] text-white rounded-md hover:bg-[#2C2B3E]/90" 
+                            : "hover:text-[#2C2B3E]"
+                        }`}
+                      >
+                        {name}
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
             </motion.div>
           </>
