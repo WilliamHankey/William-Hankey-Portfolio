@@ -5,12 +5,17 @@ import Image from "next/image";
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const navItems = {
+type NavItem = {
+  name: string;
+  isCta?: boolean;
+};
+
+const navItems: Record<string, NavItem> = {
   "/#about": { name: "About" },
   "/#work": { name: "Work" },
   "/#testimonials": { name: "Testimonials" },
   "/#contact": { name: "Contact" },
-  "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR": { name: "Download CV" },
+  "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR": { name: "Download CV", isCta: true },
 };
 
 export function Navbar() {
@@ -67,14 +72,14 @@ export function Navbar() {
       
       {/* Desktop Navigation */}
       <div className="hidden lg:flex flex-row space-x-0 p-3 fixed shadow-md w-full justify-end bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-        {Object.entries(navItems).map(([path, { name }]) => {
+        {Object.entries(navItems).map(([path, { name, isCta = false }]) => {
           const isInternal = path.startsWith("/#");
           return isInternal ? (
             <a
               key={path}
               href={path}
               onClick={(e) => handleScroll(e, path.replace("/#", ""))}
-              className="transition-all hover:text-neutral-800 flex align-middle relative py-1 px-2 m-1 cursor-pointer"
+              className="transition-all hover:text-[#2C2B3E] flex align-middle relative py-1 px-2 m-1 cursor-pointer"
             >
               {name}
             </a>
@@ -83,7 +88,11 @@ export function Navbar() {
               key={path}
               href={path}
               onClick={handleDownload}
-              className="transition-all hover:text-neutral-800 flex align-middle relative py-1 px-2 m-1"
+              className={`transition-all flex align-middle relative py-1 px-2 m-1 ${
+                isCta 
+                  ? "bg-[#2C2B3E] text-white rounded-md hover:bg-[#2C2B3E]/90" 
+                  : "hover:text-[#2C2B3E]"
+              }`}
             >
               {name}
             </a>
@@ -110,14 +119,14 @@ export function Navbar() {
               className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 lg:hidden"
             >
               <div className="flex flex-col p-4 space-y-4 mt-16">
-                {Object.entries(navItems).map(([path, { name }]) => {
+                {Object.entries(navItems).map(([path, { name, isCta }]) => {
                   const isInternal = path.startsWith("/#");
                   return isInternal ? (
                     <a
                       key={path}
                       href={path}
                       onClick={(e) => handleScroll(e, path.replace("/#", ""))}
-                      className="transition-all hover:text-neutral-800 py-2 px-4"
+                      className="transition-all hover:text-[#2C2B3E] py-2 px-4"
                     >
                       {name}
                     </a>
@@ -126,7 +135,11 @@ export function Navbar() {
                       key={path}
                       href={path}
                       onClick={handleDownload}
-                      className="transition-all hover:text-neutral-800 py-2 px-4"
+                      className={`transition-all py-2 px-4 ${
+                        isCta 
+                          ? "bg-[#2C2B3E] text-white rounded-md hover:bg-[#2C2B3E]/90" 
+                          : "hover:text-[#2C2B3E]"
+                      }`}
                     >
                       {name}
                     </a>
