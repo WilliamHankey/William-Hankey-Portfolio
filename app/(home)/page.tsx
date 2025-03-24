@@ -67,8 +67,9 @@ const socialLinks = [
               Hello, I'm William. Nice to meet you!
             </h1>
             <p className="mb-4">
-              {`I'm currently at Atlassian on the Growth team as a Director of Product Design (IC),
-              leading various types of strategic growth design work across the company.`}
+              {`I'm currently the founder of MeiFlume, an all-in-one digital transformation company, 
+              leading strategic initiatives across bespoke software solutions, marketing efforts, 
+              and end-to-end digital services.`}
             </p>
           </div>
           <div className="px-4 lg:px-40">

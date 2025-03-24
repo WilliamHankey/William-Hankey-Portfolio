@@ -41,7 +41,7 @@ export function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50">
+    <nav className="fixed top-0 left-0 right-0 z-10">
       {/* Mobile Header */}
       <div className="lg:hidden flex items-center justify-between p-4 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
@@ -65,7 +65,7 @@ export function Navbar() {
         <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
         <div className="-rotate-90 text-center h-auto w-full text-nowrap content-center justify-center flex-wrap flex flex-col align-center">
           <h1 className="text-2xl font-bold tracking-tighter">WILLIAM HANKEY</h1>
-          <p className="text-sm">PRODUCT DESIGNER</p>
+          <p className="text-sm">PRODUCT ENGINNEER</p>
         </div>
         <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
       </div>
