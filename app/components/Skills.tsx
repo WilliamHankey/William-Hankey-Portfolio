@@ -39,15 +39,17 @@ const skillLogos: Record<string, { name: string }> = {
   
   export default function Skills() {
     return (
-      <section style={{background: '#F9FAFB'}} className="text-center p-20 w-full">
-        <h1 className="mb-8 text-2xl font-semibold tracking-tighter">Skills</h1>
-        <p className="mb-4">
-          The skills, tools, and technologies I am really good at:
-        </p>
-        <div className="flex flex-row space-x-4 gap-8 flex-wrap">
-          {Object.entries(skillLogos).map(([key, value]) => (
-            <img key={key} className="w-20 h-20" src={value.name} alt={key} />
-          ))}
+      <section style={{background: '#F9FAFB'}} className="w-full text-center p-4 lg:p-20">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="mb-8 text-2xl lg:text-3xl font-semibold tracking-tighter">Skills</h1>
+          <p className="mb-8 text-sm lg:text-base">
+            The skills, tools, and technologies I am really good at:
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 lg:gap-8 justify-items-center">
+            {Object.entries(skillLogos).map(([key, value]) => (
+              <img key={key} className="w-12 h-12 lg:w-20 lg:h-20" src={value.name} alt={key} />
+            ))}
+          </div>
         </div>
       </section>
     );

@@ -8,31 +8,45 @@ export default function Projects() {
   const projects = getProjects();
 
   return (
-    <section id="work" className="grid grid-cols-1 gap-24 p-24">
-    {projects.map((project, index) => (
-      <Link key={project.slug} href={`/projects/${project.slug}`} className="block w-full">
-        {/* ✅ Apply `odd:flex-row-reverse` to the wrapping div */}
-        <div className={`bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col md:flex-row ${index % 2 !== 0 ? "md:flex-row-reverse" : ""}`}>
-          <Image
-            src={project.image}
-            alt={project.title}
-            width={400}
-            height={250}
-            className="w-1/2 h-50 object-contain"
-          />
-          <div className="p-4 w-1/2">
-            <h2 className="text-xl font-semibold">{project.title}</h2>
-            <p className="text-gray-600 text-sm">{project.description}</p>
-            <div className="flex space-x-3 mt-3">
-              {project.icons.map((icon, index) => (
-                <i key={index} className={`${icon} text-2xl text-gray-800`} />
-              ))}
+    <section id="work" className="grid grid-cols-1 gap-8 lg:gap-24 p-4 lg:p-24">
+      {projects.map((project, index) => (
+        <Link 
+          key={project.slug} 
+          href={`/projects/${project.slug}`} 
+          className="block w-full group"
+          onClick={(e) => {
+            startTransition(() => {
+              // The transition will be handled by Next.js
+            });
+          }}
+        >
+          <div className={`bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col lg:flex-row ${index % 2 !== 0 ? "lg:flex-row-reverse" : ""} group-hover:scale-[1.02]`}>
+            <div className="w-full lg:w-1/2 h-48 lg:h-auto relative">
+              <Image
+                src={project.image}
+                alt={project.title}
+                width={400}
+                height={250}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              {isPending && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+                </div>
+              )}
+            </div>
+            <div className="p-4 lg:p-8 w-full lg:w-1/2">
+              <h2 className="text-xl lg:text-2xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">{project.title}</h2>
+              <p className="text-gray-600 text-sm lg:text-base mb-4">{project.description}</p>
+              <div className="flex flex-wrap gap-3">
+                {project.icons.map((icon, index) => (
+                  <i key={index} className={`${icon} text-xl lg:text-2xl text-gray-800`} />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </Link>
-    ))}
-  </section>
-  
+        </Link>
+      ))}
+    </section>
   );
 }

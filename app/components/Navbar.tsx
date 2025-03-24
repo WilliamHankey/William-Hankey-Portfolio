@@ -2,70 +2,141 @@
 
 import Link from 'next/link'
 import Image from "next/image";
-
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navItems = {
   "/#about": { name: "About" },
   "/#work": { name: "Work" },
   "/#testimonials": { name: "Testimonials" },
   "/#contact": { name: "Contact" },
-  "https://vercel.com/templates/next.js/portfolio-starter-kit": { name: "Download CV" },
+  "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR": { name: "Download CV" },
 };
 
 export function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const handleScroll = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
     event.preventDefault();
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
     }
+    setIsMenuOpen(false);
+  };
+
+  const handleDownload = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    event.preventDefault();
+    const link = document.createElement('a');
+    link.href = "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR";
+    link.download = 'William_Hankey_CV.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
-    <aside className="-ml-[8px]  tracking-tight">
-      <div className="lg:sticky lg:top-20">
-        <nav
-          className="flex flex-row relative px-0 pb-0 fade md:overflow-automd:relative direction:rtl"
-          id="nav"
+    <nav className="fixed top-0 left-0 right-0 z-50">
+      {/* Mobile Header */}
+      <div className="lg:hidden flex items-center justify-between p-4 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
+        <button 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="p-2 rounded-md hover:bg-gray-100"
+          aria-label="Toggle menu"
         >
-          <div className='flex flex-row relative w-full justify-end'>
-            <div className='fixed top-0 left-0  flex flex-col justify-between items-top flex-wrap shadow-md z-10 p-2' style={{height:"100vh", maxWidth:"4%"}}>
-              <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
-              <div className='-rotate-90 text-center h-auto w-full text-nowrap content-center justify-center flex-wrap flex flex-col align-center'>
-                <h1 className='text-2xl font-bold tracking-tighter'>WILLIAM HANKEY</h1>
-                <p className='text-sm'>PRODUCT DESIGNER</p>
-              </div>
-              <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
-            </div>
-            
-            <div className="flex flex-row space-x-0 p-3 fixed shadow-md w-full justify-end bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-              {Object.entries(navItems).map(([path, { name }]) => {
-                const isInternal = path.startsWith("/#");
-
-                return isInternal ? (
-                  <a
-                    key={path}
-                    href={path}
-                    onClick={(e) => handleScroll(e, path.replace("/#", ""))}
-                    className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-1 px-2 m-1 cursor-pointer"
-                  >
-                    {name}
-                  </a>
-                ) : (
-                  <Link
-                    key={path}
-                    href={path}
-                    className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-1 px-2 m-1"
-                  >
-                    {name}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-          
-        </nav>
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
       </div>
-    </aside>
-  )
+
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:flex fixed top-0 left-0 flex-col justify-between items-top flex-wrap shadow-md z-10 p-2" style={{height:"100vh", maxWidth:"4%"}}>
+        <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
+        <div className="-rotate-90 text-center h-auto w-full text-nowrap content-center justify-center flex-wrap flex flex-col align-center">
+          <h1 className="text-2xl font-bold tracking-tighter">WILLIAM HANKEY</h1>
+          <p className="text-sm">PRODUCT DESIGNER</p>
+        </div>
+        <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
+      </div>
+      
+      {/* Desktop Navigation */}
+      <div className="hidden lg:flex flex-row space-x-0 p-3 fixed shadow-md w-full justify-end bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        {Object.entries(navItems).map(([path, { name }]) => {
+          const isInternal = path.startsWith("/#");
+          return isInternal ? (
+            <a
+              key={path}
+              href={path}
+              onClick={(e) => handleScroll(e, path.replace("/#", ""))}
+              className="transition-all hover:text-neutral-800 flex align-middle relative py-1 px-2 m-1 cursor-pointer"
+            >
+              {name}
+            </a>
+          ) : (
+            <a
+              key={path}
+              href={path}
+              onClick={handleDownload}
+              className="transition-all hover:text-neutral-800 flex align-middle relative py-1 px-2 m-1"
+            >
+              {name}
+            </a>
+          );
+        })}
+      </div>
+
+      {/* Mobile Navigation */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              onClick={() => setIsMenuOpen(false)}
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 20 }}
+              className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 lg:hidden"
+            >
+              <div className="flex flex-col p-4 space-y-4 mt-16">
+                {Object.entries(navItems).map(([path, { name }]) => {
+                  const isInternal = path.startsWith("/#");
+                  return isInternal ? (
+                    <a
+                      key={path}
+                      href={path}
+                      onClick={(e) => handleScroll(e, path.replace("/#", ""))}
+                      className="transition-all hover:text-neutral-800 py-2 px-4"
+                    >
+                      {name}
+                    </a>
+                  ) : (
+                    <a
+                      key={path}
+                      href={path}
+                      onClick={handleDownload}
+                      className="transition-all hover:text-neutral-800 py-2 px-4"
+                    >
+                      {name}
+                    </a>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
 }

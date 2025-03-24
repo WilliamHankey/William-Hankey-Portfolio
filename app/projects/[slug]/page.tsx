@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { getProjects } from "./data";
 import Link from "next/link";
 import { AnimatePresence } from "motion/react"
@@ -10,6 +10,7 @@ import * as motion from "motion/react-client"
 
 export default function ProjectDetail() {
   const { slug } = useParams();
+  const router = useRouter();
   const projects = getProjects();
   const project = projects.find((proj) => proj.slug === slug);
 
@@ -21,213 +22,223 @@ export default function ProjectDetail() {
 
   const [selectedTab, setSelectedTab] = useState<{ label: string; icon: string } | null>(null);
 
-
-
   useEffect(() => {
     setSelectedTab(tabs[0]);
   }, []);
 
   if (!project) {
-    return <h1 className="text-3xl font-bold text-red-500">Project Not Found</h1>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <h1 className="text-3xl font-bold text-red-500">Project Not Found</h1>
+      </div>
+    );
   }
 
   return (
     <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-  >
-      <section className="ml-32 px-48 py-16">
-      <div className="flex flex-row gap-8 mt-6 " >
-          <div className="w-1/2 ">   
-          <div className="w-full border rounded-lg shadow-lg overflow-hidden">
-            <Image
-              src={project.image}
-              alt={project.title}
-              width={800}
-              height={450}
-              className="w-full h-auto object-cover"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Header Section */}
+      <header className="relative">
+        {/* Back Button */}
+        <button
+          onClick={() => router.push('/')}
+          className="fixed top-6 left-6 z-50 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+          aria-label="Back to home"
+        >
+          <svg
+            className="w-6 h-6 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
             />
-        </div>
-        </div>
-          <div className="w-1/2 flex flex-col justify-between">
-            <div>
-              <h1 className="text-5xl font-extrabold">{project.title}</h1>
-              <p className="text-gray-500 mt-2 text-lg">
-                An advanced data platform for product growth and analytics.
-              </p>
-            </div>
+          </svg>
+        </button>
 
-            <div>
-              <div className="flex space-x-3 mt-4">
-                <span className="bg-blue-100 text-blue-700 text-sm px-3 py-1 rounded-full">Frontend</span>
-                <span className="bg-green-100 text-green-700 text-sm px-3 py-1 rounded-full">Project Management</span>
-                <span className="bg-purple-100 text-purple-700 text-sm px-3 py-1 rounded-full">Growth Analytics</span>
-              </div>
+        {/* Hero Image */}
+        <div className="relative h-[40vh] w-full">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+      </header>
 
-              {project.link && (
-                <div className="mt-6">
-                  <Link href={project.link} target="_blank" rel="noopener noreferrer">
-                    <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition">
-                      Visit Live Site
-                    </button>
-                  </Link>
-                </div>
-              )}
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Project Info */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-bold mb-4">{project.title}</h1>
+            <p className="text-gray-600 text-lg mb-6">
+              An advanced data platform for product growth and analytics.
+            </p>
+            <div className="flex flex-wrap gap-3 mb-6">
+              <span className="bg-blue-100 text-blue-700 text-sm px-3 py-1 rounded-full">Frontend</span>
+              <span className="bg-green-100 text-green-700 text-sm px-3 py-1 rounded-full">Project Management</span>
+              <span className="bg-purple-100 text-purple-700 text-sm px-3 py-1 rounded-full">Growth Analytics</span>
             </div>
+            {project.link && (
+              <Link 
+                href={project.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              >
+                Visit Live Site
+              </Link>
+            )}
           </div>
+        </div>
 
-      </div>
-
-   
-            {/* ✅ Tabs Navigation with Framer Motion */}
-            <div className="mt-10">
-        <nav className="border-b">
-          <ul className="flex space-x-4">
+        {/* Tabs Navigation */}
+        <div className="border-b border-gray-200 mb-8">
+          <nav className="flex flex-wrap -mb-px">
             {tabs.map((tab) => (
-              <motion.li
+              <motion.button
                 key={tab.label}
                 initial={false}
                 animate={{
-                  backgroundColor: tab === selectedTab ? "#eee" : "transparent",
+                  backgroundColor: tab === selectedTab ? "#f3f4f6" : "transparent",
                 }}
-                className={`cursor-pointer px-4 py-2 rounded-md relative ${
-                  tab === selectedTab ? "font-bold text-blue-600" : "text-gray-500"
+                className={`flex items-center px-4 py-2 text-sm font-medium rounded-t-lg ${
+                  tab === selectedTab 
+                    ? "text-blue-600 border-b-2 border-blue-600" 
+                    : "text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
                 onClick={() => setSelectedTab(tab)}
               >
-                {`${tab.icon} ${tab.label}`}
-                {tab === selectedTab ? (
-                  <motion.div
-                    layoutId="underline"
-                    className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500"
-                  />
-                ) : null}
-              </motion.li>
+                <span className="mr-2">{tab.icon}</span>
+                {tab.label}
+              </motion.button>
             ))}
-          </ul>
-        </nav>
-      </div>
+          </nav>
+        </div>
 
-      {/* ✅ Tab Content */}
-      <div className="mt-6">
-        <AnimatePresence mode="wait">
-          {selectedTab?.label === "Overview" && (
-            <motion.div
-              key="overview"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-6"
-            >
-              {/* ✅ Project Summary */}
-              <div>
-                <h2 className="text-2xl font-semibold">Project Overview</h2>
-                <p className="text-gray-500 mt-2 leading-relaxed">
-                  <strong>{project.title}</strong> is a **comprehensive growth infrastructure**
-                  inspired by the tools used at Facebook, enabling **product builders** to leverage
-                  **Feature Flagging, Experimentation, and Analytics** to drive business growth.
-                </p>
-              </div>
+        {/* Tab Content */}
+        <div className="prose prose-lg max-w-none">
+          <AnimatePresence mode="wait">
+            {selectedTab?.label === "Overview" && (
+              <motion.div
+                key="overview"
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -10, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-8"
+              >
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4">Project Overview</h2>
+                  <p className="text-gray-600">
+                    <strong>{project.title}</strong> is a comprehensive growth infrastructure
+                    inspired by the tools used at Facebook, enabling product builders to leverage
+                    Feature Flagging, Experimentation, and Analytics to drive business growth.
+                  </p>
+                </section>
 
-              <div>
-                <h2 className="text-2xl font-semibold">Challenges & Solutions</h2>
-                <ul className="list-disc list-inside text-gray-500 space-y-2 mt-2">
-                  <li><strong>Scalability Issues</strong>: Built to handle millions of data points efficiently.</li>
-                  <li><strong>Complex Experimentation</strong>: Integrated seamless A/B testing with real-time analytics.</li>
-                  <li><strong>Feature Management</strong>: Enabled dynamic feature flagging to release updates safely.</li>
-                </ul>
-              </div>
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4">Challenges & Solutions</h2>
+                  <ul className="list-disc list-inside space-y-3 text-gray-600">
+                    <li><strong>Scalability Issues</strong>: Built to handle millions of data points efficiently.</li>
+                    <li><strong>Complex Experimentation</strong>: Integrated seamless A/B testing with real-time analytics.</li>
+                    <li><strong>Feature Management</strong>: Enabled dynamic feature flagging to release updates safely.</li>
+                  </ul>
+                </section>
 
-              <div>
-                <h2 className="text-2xl font-semibold">Key Features</h2>
-                <ul className="grid grid-cols-2 gap-4 text-gray-500 mt-2">
-                  <li className="flex items-center space-x-2">
-                    <i className="devicon-react-original text-2xl"></i>
-                    <span>Feature Flagging</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <i className="devicon-nodejs-plain text-2xl"></i>
-                    <span>Real-time Experimentation</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <i className="devicon-react-original text-2xl"></i>
-                    <span>Scalable Data Infrastructure</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <i className="devicon-nodejs-plain text-2xl"></i>
-                    <span>Growth-Focused Analytics</span>
-                  </li>
-                </ul>
-              </div>
-            </motion.div>
-          )}
-
-          {selectedTab?.label === "Showcase" && (
-            <motion.div
-              key="showcase"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-12 mt-6"
-            >
-              {project.showcase?.map((item, index) => (
-                <div
-                  key={index}
-                  className={`flex flex-col md:flex-row items-center ${
-                    index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                  }`}
-                >
-                  {/* Image */}
-                  <div className="md:w-1/2">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      width={600}
-                      height={400}
-                      className="rounded-lg shadow-lg"
-                    />
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4">Key Features</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {[
+                      { icon: "devicon-react-original", text: "Feature Flagging" },
+                      { icon: "devicon-nodejs-plain", text: "Real-time Experimentation" },
+                      { icon: "devicon-react-original", text: "Scalable Data Infrastructure" },
+                      { icon: "devicon-nodejs-plain", text: "Growth-Focused Analytics" }
+                    ].map((feature, index) => (
+                      <div key={index} className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
+                        <i className={`${feature.icon} text-2xl text-gray-700`} />
+                        <span className="text-gray-600">{feature.text}</span>
+                      </div>
+                    ))}
                   </div>
+                </section>
+              </motion.div>
+            )}
 
-                  {/* Description */}
-                  <div className="md:w-1/2 px-6">
-                    <h2 className="text-2xl font-semibold">{item.title}</h2>
-                    <p className="text-gray-500 mt-2">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
-          )}
-
-          {selectedTab?.label === "Tech" && (
-            <motion.div
-              key="tech"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <h2 className="text-2xl font-semibold">Tech Stack</h2>
-              <ul className="mt-2 space-y-2">
-                {project.icons.map((icon, index) => (
-                  <li key={index} className="flex items-center space-x-2">
-                    <i className={`${icon} text-2xl`}></i>
-                    <span className="capitalize">
-                      {icon.replace("devicon-", "").replace("-original", "").replace("-plain", "")}
-                    </span>
-                  </li>
+            {selectedTab?.label === "Showcase" && (
+              <motion.div
+                key="showcase"
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -10, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-16"
+              >
+                {project.showcase?.map((item, index) => (
+                  <section
+                    key={index}
+                    className={`flex flex-col ${
+                      index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                    } gap-8 items-center`}
+                  >
+                    <div className="w-full lg:w-1/2">
+                      <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full lg:w-1/2">
+                      <h2 className="text-2xl font-semibold mb-4">{item.title}</h2>
+                      <p className="text-gray-600">{item.description}</p>
+                    </div>
+                  </section>
                 ))}
-              </ul>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              </motion.div>
+            )}
 
-    </section>
-  </motion.div>
-  
+            {selectedTab?.label === "Tech" && (
+              <motion.div
+                key="tech"
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -10, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <h2 className="text-2xl font-semibold mb-6">Tech Stack</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {project.icons.map((icon, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm"
+                    >
+                      <i className={`${icon} text-2xl text-gray-700`} />
+                      <span className="text-gray-600 capitalize">
+                        {icon.replace("devicon-", "").replace("-original", "").replace("-plain", "")}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </main>
+    </motion.div>
   );
 }
 
