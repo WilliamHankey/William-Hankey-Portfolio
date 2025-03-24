@@ -15,21 +15,25 @@ const socialLinks = [
     name: "LinkedIn",
     defaultSrc: "https://s.magecdn.com/social/mw-linkedin.svg",
     hoverSrc: "https://s.magecdn.com/social/tc-linkedin.svg",
+    link: "https://www.linkedin.com/in/williamhankey/"
   },
   {
     name: "Dribbble",
     defaultSrc: "https://s.magecdn.com/social/mw-dribbble.svg",
     hoverSrc: "https://s.magecdn.com/social/tc-dribbble.svg",
+    link: "https://dribbble.com/williamhankey"
   },
   {
     name: "Behance",
     defaultSrc: "https://s.magecdn.com/social/mw-behance.svg",
     hoverSrc: "https://s.magecdn.com/social/tc-behance.svg",
+    link: "https://www.behance.net/amethHQ"
   },
   {
     name: "Medium",
     defaultSrc: "https://s.magecdn.com/social/mw-medium.svg",
     hoverSrc: "https://s.magecdn.com/social/tc-medium.svg",
+    link: "https://medium.com/@wchankey15"
   },
 ];
 
@@ -45,7 +49,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-gray-800 text-white p-4 lg:px-24 lg:py-8">
+    <footer className="bg-gray-800 text-white p-4 lg:px-24 lg:py-8 z-20">
       <div className="flex flex-col lg:flex-row gap-8 mb-8">
         <div className="w-full lg:w-1/4">
           <h6 className="text-lg font-semibold mb-4">About Me</h6>
@@ -84,15 +88,25 @@ export default function Footer() {
           <div className="space-y-2 text-gray-300">
             <div>Cape Town, South Africa</div>
             <div>william@meiflume.com</div>
-            <div>Connect on LinkedIn</div>
+            <a 
+              href="https://www.linkedin.com/in/williamhankey/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              Connect on LinkedIn
+            </a>
           </div>
         </div>
         <div className="w-full lg:w-1/4">
           <h3 className="text-lg font-semibold mb-4">FOLLOW ME HERE</h3>
           <div className="flex flex-wrap gap-2">
             {socialLinks.map((link) => (
-              <button
+              <a
                 key={link.name}
+                href={link.link}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="border border-gray-600 rounded p-2 hover:border-white transition-colors"
                 onMouseEnter={() => setHovered(link.name)}
                 onMouseLeave={() => setHovered(null)}
@@ -102,7 +116,7 @@ export default function Footer() {
                   alt={link.name}
                   className="w-6 h-6 transition-all duration-200"
                 />
-              </button>
+              </a>
             ))}
           </div>
         </div>

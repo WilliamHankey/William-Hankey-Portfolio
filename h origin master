@@ -1,0 +1,5 @@
+[33mcommit 11c264cd0a8e83e1c10cdd0f8459c2a4f45a0362[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m
+Author: WilliamHankey <wchankey15@gmail.com>
+Date:   Mon Mar 24 20:09:22 2025 +0200
+
+    fix: add TypeScript types to Navbar component to resolve type errors

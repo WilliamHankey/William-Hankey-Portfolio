@@ -9,6 +9,12 @@ export default function Projects() {
 
   return (
     <section id="work" className="grid grid-cols-1 gap-8 lg:gap-24 p-4 lg:p-24">
+      <div className="text-center mb-12">
+        <h1 className="text-2xl lg:text-3xl font-semibold tracking-tighter mb-4">Work</h1>
+        <div className="inline-block bg-[#2C2B3E] text-white px-4 py-2 rounded-full text-sm">
+          Featured projects and case studies
+        </div>
+      </div>
       {projects.map((project, index) => (
         <Link 
           key={project.slug} 
@@ -36,7 +42,7 @@ export default function Projects() {
               )}
             </div>
             <div className="p-4 lg:p-8 w-full lg:w-1/2">
-              <h2 className="text-xl lg:text-2xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">{project.title}</h2>
+              <h2 className="text-xl lg:text-2xl font-semibold mb-2 group-hover:text-[#2C2B3E] transition-colors">{project.title}</h2>
               <p className="text-gray-600 text-sm lg:text-base mb-4">{project.description}</p>
               <div className="flex flex-wrap gap-3">
                 {project.icons.map((icon, index) => (

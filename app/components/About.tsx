@@ -1,46 +1,53 @@
 export default function About() {
   return (
-    <section id="about" className="p-4 lg:p-20 flex flex-col lg:flex-row gap-8">
-      <div className="w-full lg:w-1/3 flex flex-col justify-between">
-        <h1 className="mb-8 text-3xl lg:text-5xl font-semibold tracking-tighter">
-          About Me
-        </h1>
-        <p className="mb-4">
-          {`Currently leading design at Atlassian on the Growth team as an IC Director.
-          Before that, I worked at Statsig as Head of Design, Director. My career
-          started at Facebook where I successfully launched highly impactful product
-          features, reaching one of the fastest promotion track and exceptional
-          ratings at the company.`}
-        </p>
-        <p className="mb-4">
-          {`I first got into design when I decided to pursue Master's in HCI degree at
-            Georgia Institute of Technology. From then on, my passion towards design
-            had sparked greatly which allowed me to spend countless days and nights
-            improving my skills and knowledge.`}
-        </p>
-        <p className="mb-4">
-          {`Currently leading design at Atlassian on the Growth team as an IC Director.
-          Before that, I worked at Statsig as Head of Design, Director. My career
-          started at Facebook where I successfully launched highly impactful product
-          features, reaching one of the fastest promotion track and exceptional
-          ratings at the company.`}
+    <section id="about" className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="text-center mb-8 lg:mb-0">
+        <h2 className="text-2xl font-semibold mb-4">About Me</h2>
+        <div className="inline-block bg-[#2C2B3E] text-white px-4 py-2 rounded-full text-sm mb-4">
+          Product Designer & UX Strategist
+        </div>
+        <p className="text-gray-600">
+          I'm a product designer with a passion for creating user-centered experiences.
+          I believe in the power of design to solve complex problems and make a positive impact.
         </p>
       </div>
-      <div className="w-full lg:w-1/3">
-        <h1 className="mb-8 text-3xl lg:text-5xl font-semibold tracking-tighter">
-          Experience
-        </h1>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Experience</h2>
+        <p className="text-gray-600">
+          With over 10 years of experience in product design, I've worked with various companies
+          to create innovative solutions that drive business growth and user satisfaction.
+        </p>
+      </div>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Articles</h2>
         <div className="space-y-4">
-          <div className="font-semibold">
-            February 2024 — Current
-          </div>
-          <div className="text-lg">
-            Director IC, Product Design - MeiFlume
-          </div>
-          <p className="text-gray-600">
-            {`As a Director-level Designer on the Growth team, I report directly to VP, Head of Design
-            to lead various types of strategic growth design work across the company`}
-          </p>
+          <a 
+            href="https://medium.com/@williamhankey" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block text-gray-600 hover:text-[#2C2B3E] transition-colors"
+          >
+            <h3 className="font-medium">The Future of Product Design</h3>
+            <p className="text-sm text-gray-500">Published on Medium</p>
+          </a>
+          <a 
+            href="https://medium.com/@williamhankey" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block text-gray-600 hover:text-[#2C2B3E] transition-colors"
+          >
+            <h3 className="font-medium">Design Systems: A Comprehensive Guide</h3>
+            <p className="text-sm text-gray-500">Published on Medium</p>
+          </a>
+          <a 
+            href="https://medium.com/@williamhankey" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block text-gray-600 hover:text-[#2C2B3E] transition-colors"
+          >
+            <h3 className="font-medium">User Research Best Practices</h3>
+            <p className="text-sm text-gray-500">Published on Medium</p>
+          </a>
         </div>
       </div>
     </section>

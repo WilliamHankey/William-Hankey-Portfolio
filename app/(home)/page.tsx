@@ -8,18 +8,51 @@ import About from "../components/About";
 import Quote from "../components/Quote";
 import Testimonials from "../components/Testimonials";
 import Contact from "../components/Contact";
+import { useState } from "react";
 
 export default function Home() {
   const { ref: skillRef, inView: skillInView } = useInView({ triggerOnce: true, threshold: 0.5 });
   const { ref: aboutRef, inView: aboutInView } = useInView({ triggerOnce: true, threshold: 0.1 });
   const { ref: projectsRef, inView: projectsInView } = useInView({ triggerOnce: true, threshold: 0.2 });
 
+  const [hovered, setHovered] = useState<string | null>(null);
+
+
   const scrollToAbout = () => {
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    const skillsSection = document.getElementById('skills');
+    if (skillsSection) {
+      skillsSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  
+const socialLinks = [
+    {
+      name: "LinkedIn",
+      defaultSrc: "https://s.magecdn.com/social/mw-linkedin.svg",
+      hoverSrc: "https://s.magecdn.com/social/tc-linkedin.svg",
+      link: "https://www.linkedin.com/in/williamhankey/"
+    },
+    {
+      name: "Dribbble",
+      defaultSrc: "https://s.magecdn.com/social/mw-dribbble.svg",
+      hoverSrc: "https://s.magecdn.com/social/tc-dribbble.svg",
+      link: "https://dribbble.com/williamhankey"
+    },
+    {
+      name: "Behance",
+      defaultSrc: "https://s.magecdn.com/social/mw-behance.svg",
+      hoverSrc: "https://s.magecdn.com/social/tc-behance.svg",
+      link: "https://www.behance.net/amethHQ"
+    },
+    {
+      name: "Medium",
+      defaultSrc: "https://s.magecdn.com/social/mw-medium.svg",
+      hoverSrc: "https://s.magecdn.com/social/tc-medium.svg",
+      link: "https://medium.com/@wchankey15"
+    },
+  ];
+  
 
   return (
     <motion.div
@@ -44,14 +77,34 @@ export default function Home() {
         </div>
         <div className="w-full lg:w-1/2 mt-8 lg:mt-0 relative">
           <img src="/assets/heroImage.png" alt="Hero Image" className="w-full h-auto" />
+          <div className="flex flex-row space-x-1 absolute bottom-8 right-9 ">
+                {socialLinks.map((link) => (
+                    <a
+                    key={link.name}
+                    href={link.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border-gray-500 border-2 items-center rounded"
+                    onMouseEnter={() => setHovered(link.name)}
+                    onMouseLeave={() => setHovered(null)}
+                    >
+                    <img
+                        src={hovered === link.name ? link.hoverSrc : link.defaultSrc}
+                        alt={link.name}
+                        className="w-full h-7 transition-all duration-200"
+                    />
+                    </a>
+                ))}
+            </div>
+        
           <motion.button
             onClick={scrollToAbout}
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-shadow duration-300"
+            className="absolute bottom-8 left-1 transform -translate-x-1/2 bg-[#2C2B3E] hover:bg-[#2C2B3E]/90 rounded-full p-3 shadow-lg hover:shadow-xl transition-shadow duration-300"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
             <svg
-              className="w-6 h-6 text-gray-600"
+              className="w-6 h-6 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
