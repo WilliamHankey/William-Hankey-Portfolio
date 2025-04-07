@@ -142,30 +142,25 @@ export default function ProjectDetail() {
                 <section>
                   <h2 className="text-2xl font-semibold mb-4">Project Overview</h2>
                   <p className="text-gray-600">
-                    <strong>{project.title}</strong> is a comprehensive growth infrastructure
-                    inspired by the tools used at Facebook, enabling product builders to leverage
-                    Feature Flagging, Experimentation, and Analytics to drive business growth.
+                    {project.shortOverview}
                   </p>
                 </section>
 
                 <section>
                   <h2 className="text-2xl font-semibold mb-4">Challenges & Solutions</h2>
                   <ul className="list-disc list-inside space-y-3 text-gray-600">
-                    <li><strong>Scalability Issues</strong>: Built to handle millions of data points efficiently.</li>
-                    <li><strong>Complex Experimentation</strong>: Integrated seamless A/B testing with real-time analytics.</li>
-                    <li><strong>Feature Management</strong>: Enabled dynamic feature flagging to release updates safely.</li>
+                    {project.challenges.map((challenge, index) => (
+                      <li key={index}>
+                        <strong>{challenge.title}</strong>: {challenge.description}
+                      </li>
+                    ))}
                   </ul>
                 </section>
 
                 <section>
                   <h2 className="text-2xl font-semibold mb-4">Key Features</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {[
-                      { icon: "devicon-react-original", text: "Feature Flagging" },
-                      { icon: "devicon-nodejs-plain", text: "Real-time Experimentation" },
-                      { icon: "devicon-react-original", text: "Scalable Data Infrastructure" },
-                      { icon: "devicon-nodejs-plain", text: "Growth-Focused Analytics" }
-                    ].map((feature, index) => (
+                    {project.keyFeatures.map((feature, index) => (
                       <div key={index} className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
                         <i className={`${feature.icon} text-2xl text-gray-700`} />
                         <span className="text-gray-600">{feature.text}</span>
@@ -221,15 +216,13 @@ export default function ProjectDetail() {
               >
                 <h2 className="text-2xl font-semibold mb-6">Tech Stack</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {project.icons.map((icon, index) => (
+                  {project.techStack.map((tech, index) => (
                     <div
                       key={index}
                       className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm"
                     >
-                      <i className={`${icon} text-2xl text-gray-700`} />
-                      <span className="text-gray-600 capitalize">
-                        {icon.replace("devicon-", "").replace("-original", "").replace("-plain", "")}
-                      </span>
+                      <i className={`${tech.icon} text-2xl text-gray-700`} />
+                      <span className="text-gray-600">{tech.name}</span>
                     </div>
                   ))}
                 </div>

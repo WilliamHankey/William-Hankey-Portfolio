@@ -8,22 +8,22 @@ const testimonials: Record<
     name: "Senzo",
     image: "/assets/logos/css.svg", // ✅ Fixed path (removed "../assests/")
     description:
-      "“Job well done! I am really impressed. He is very very good at what he does:) I would recommend Sagar and will rehire in the future for Frontend development.”",
-    info: "Colleague",
+      "“I highly recommend William Hankey. We worked together on a full-stack C# and Angular project where his frontend contributions stood out. William transformed our basic Angular UI into a stunning, user-friendly experience, consistently going above and beyond. He took initiative, identified UX improvements, and delivered creative, high-quality solutions. William brought a strong sense of ownership and collaboration, making the project feel like a true partnership. His attention to detail, proactive mindset, and frontend expertise make him a valuable asset to any team.”",
+    info: "Junior Developer",
   },
   antonio: {
-    name: "Antonio",
+    name: "Leezah",
     image: "/assets/logos/css.svg", // ✅ Fixed path
     description:
-      "“Job well done! I am really impressed. He is very very good at what he does:) I would recommend Sagar and will rehire in the future for Frontend development.”",
-    info: "Colleague",
+      "“Working with William Hankey for a year on a major project has been a privilege. He’s one of the most skilled and dedicated Angular developers I’ve met. His deep frontend knowledge, clean code practices, and problem-solving mindset played a key role in building a high-quality, scalable application. William is also a natural mentor and team player, always eager to collaborate and share insights. His proactive approach and passion for staying ahead in Angular make him a valuable asset to any team. I highly recommend him.”",
+    info: "Senior Consultant",
   },
   ian: {
     name: "Ian",
     image: "/assets/logos/css.svg", // ✅ Fixed path
     description:
       "“I highly recommend William Hankey as a full-stack developer. In just a few months of working closely with him, his expertise and adaptability became evident. William excels in all things visual, with meticulous attention to detail in front-end development and design. At the same time, he demonstrates strong proficiency in data and domain knowledge, making him a well-rounded full-stack engineer. I can personally attest to his readiness in the Angular-C# stack.”",
-    info: "Colleague",
+    info: "Intermediate Developer",
   },
 };
 

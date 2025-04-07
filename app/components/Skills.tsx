@@ -35,6 +35,24 @@ const skillLogos: Record<string, { name: string }> = {
     git: {
       name: "../assets/logos/git.svg",
     },
+    next: {
+      name: "../assets/logos/next.svg",
+    },
+    node: {
+      name: "../assets/logos/node.svg",
+    },
+    express: {
+      name: "../assets/logos/express.svg",
+    },
+    sass: {
+      name: "../assets/logos/sass.svg",
+    },
+    storybook: {
+      name: "../assets/logos/storybook.svg",
+    },
+    sanity: {
+      name: "../assets/logos/sanity.svg",
+    },
   };
   
   export default function Skills() {
