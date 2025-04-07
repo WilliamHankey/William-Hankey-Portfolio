@@ -22,7 +22,7 @@ const testimonials: Record<
     name: "Ian",
     image: "/assets/logos/css.svg", // ✅ Fixed path
     description:
-      "“Job well done! I am really impressed. He is very very good at what he does:) I would recommend Sagar and will rehire in the future for Frontend development.”",
+      "“I highly recommend William Hankey as a full-stack developer. In just a few months of working closely with him, his expertise and adaptability became evident. William excels in all things visual, with meticulous attention to detail in front-end development and design. At the same time, he demonstrates strong proficiency in data and domain knowledge, making him a well-rounded full-stack engineer. I can personally attest to his readiness in the Angular-C# stack.”",
     info: "Colleague",
   },
 };

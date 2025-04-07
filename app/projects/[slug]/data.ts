@@ -50,11 +50,19 @@ export function getProjects() {
         ],
       },
       {
-        slug: "commerce-app",
-        title: "E-Commerce App",
+        slug: "sakai-app",
+        title: "Sakai App",
         description: "A modern e-commerce platform with seamless UI/UX.",
-        image: "/assets/projects/statsig.png",
+        image: "/assets/projects/sakai.png",
         icons: ["devicon-nextjs-original", "devicon-tailwindcss-plain"],
+        link: "https://sakai-huy-admin.vercel.app/",
+        showcase: [
+          {
+            image: "/assets/projects/synergyflow/tasks.svg",
+            title: "Task Management",
+            description: "Organize, assign, and track tasks efficiently with an intuitive interface."
+          }
+        ],
       },
       {
         slug: "ommerce-app",
