@@ -6,7 +6,7 @@ Since your Sanity Studio is in a separate project, follow these steps to add the
 
 ### Step 1: Copy the Schema File
 
-1. Open the file `sanity-project-schema.ts` in this repository
+1. The schema is already set up in `sanity-studio/schemas/project.js` and deployed
 2. Copy its entire contents
 3. In your Sanity Studio project, create a new file: `schemas/project.ts` (or `schemas/project.js` if using JavaScript)
 4. Paste the copied content into that file

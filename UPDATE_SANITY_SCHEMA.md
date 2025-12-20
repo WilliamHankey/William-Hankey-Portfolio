@@ -37,7 +37,7 @@ Your current Sanity schema has a different structure than your hardcoded project
    - Or note down the current field values
 
 2. **Update the schema file:**
-   - Open `sanity-project-schema-updated.ts` in this repository
+   - The schema is already in `sanity-studio/schemas/project.js` and has been deployed
    - Copy the entire content
    - In your Sanity Studio, open `schemas/project.ts` (or wherever your project schema is)
    - Replace the entire file content with the updated schema
@@ -75,7 +75,7 @@ Your current Sanity schema has a different structure than your hardcoded project
 1. **Delete existing projects** (optional, only if you want to start fresh)
 
 2. **Update the schema:**
-   - Copy `sanity-project-schema-updated.ts` to your Sanity Studio
+   - The schema is already deployed to your Sanity Studio at https://wchportfolioadmin.sanity.studio/
    - Replace your current project schema
 
 3. **Create new projects** with the updated structure

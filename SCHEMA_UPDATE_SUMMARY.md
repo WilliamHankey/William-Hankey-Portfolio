@@ -6,9 +6,8 @@ I've created the updated schema file that matches your hardcoded project structu
 
 ## Files Created
 
-1. **`sanity-project-schema-updated.ts`** - The complete updated schema
+1. **`sanity-studio/schemas/project.js`** - The complete updated schema (already deployed)
 2. **`UPDATE_SANITY_SCHEMA.md`** - Detailed migration guide
-3. **`sanity-data-after-schema-update.ts`** - Updated GROQ queries (for after schema update)
 
 ## What Needs to Change in Your Sanity Studio
 
@@ -25,10 +24,10 @@ I've created the updated schema file that matches your hardcoded project structu
 
 ## Quick Steps
 
-1. **Copy the schema:**
-   - Open `sanity-project-schema-updated.ts` in this repo
-   - Copy entire content
-   - Paste into your Sanity Studio: `schemas/project.ts`
+1. **Schema is already deployed:**
+   - The updated schema is already in `sanity-studio/schemas/project.js`
+   - It has been deployed to your Sanity Studio at https://wchportfolioadmin.sanity.studio/
+   - You can view/edit it in the Studio interface
 
 2. **Update existing projects:**
    - For each project, convert:
