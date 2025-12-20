@@ -7,9 +7,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-sanity": "node scripts/check-sanity.js"
   },
   "dependencies": {
+    "@sanity/client": "^7.13.2",
     "framer-motion": "^12.4.10",
     "motion": "^12.4.10",
     "next": "15.2.8",
