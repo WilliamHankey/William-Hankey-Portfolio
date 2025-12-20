@@ -4,7 +4,11 @@ import { unstable_ViewTransition as ViewTransition } from "react"
 
 export const metadata: Metadata = {
   icons: {
-    icon: '/assets/wordmark.svg',
+    icon: [
+      { url: '/assets/wordmark.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/assets/wordmark.svg',
+    apple: '/assets/wordmark.svg',
   },
 }
 
