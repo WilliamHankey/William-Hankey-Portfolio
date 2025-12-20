@@ -11,6 +11,10 @@
 !.yarn/releases
 !.yarn/versions
 
+# sanity studio build artifacts
+/sanity-studio/.sanity/
+/sanity-studio/dist/
+
 # testing
 /coverage
 
