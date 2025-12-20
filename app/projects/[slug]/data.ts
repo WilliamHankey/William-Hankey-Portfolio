@@ -25,7 +25,8 @@ export interface Project {
   }[];
 }
 
-export function getProjects(): Project[] {
+// Fallback hardcoded data (used if Sanity is not configured or fails)
+function getHardcodedProjects(): Project[] {
   return [
     {
       slug: "synergyflow",
@@ -204,5 +205,28 @@ export function getProjects(): Project[] {
       ]
     },
   ];
+}
+
+// Main function that tries Sanity first, falls back to hardcoded data
+export async function getProjects(): Promise<Project[]> {
+  // Check if Sanity is configured
+  if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+    try {
+      const { getProjectsFromSanity } = await import('./sanity-data');
+      const projects = await getProjectsFromSanity();
+      if (projects && projects.length > 0) {
+        return projects;
+      }
+    } catch (error) {
+      console.warn('Failed to fetch from Sanity, using fallback data:', error);
+    }
+  }
+  // Fallback to hardcoded data
+  return getHardcodedProjects();
+}
+
+// Synchronous version for client components (uses fallback)
+export function getProjectsSync(): Project[] {
+  return getHardcodedProjects();
 }
   
