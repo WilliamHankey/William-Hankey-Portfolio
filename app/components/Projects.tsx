@@ -1,11 +1,32 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { useTransition } from "react";
-import { getProjects } from "../projects/[slug]/data";
+import { useTransition, useEffect, useState } from "react";
+import { getProjects, getProjectsSync, Project } from "../projects/[slug]/data";
 
 export default function Projects() {
   const [isPending, startTransition] = useTransition();
-  const projects = getProjects();
+  const [projects, setProjects] = useState<Project[]>(getProjectsSync());
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // Try to fetch from Sanity if configured
+    // NEXT_PUBLIC_ variables are available in client components
+    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+    
+    if (projectId) {
+      setIsLoading(true);
+      getProjects().then((fetchedProjects) => {
+        if (fetchedProjects && fetchedProjects.length > 0) {
+          setProjects(fetchedProjects);
+        }
+        setIsLoading(false);
+      }).catch(() => {
+        setIsLoading(false);
+      });
+    }
+  }, []);
 
   return (
     <section id="work" className="grid grid-cols-1 gap-8 lg:gap-24 p-4 lg:p-24">

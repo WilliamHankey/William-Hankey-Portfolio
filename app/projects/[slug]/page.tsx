@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { getProjects } from "./data";
+import { getProjects, getProjectsSync, Project } from "./data";
 import Link from "next/link";
 import { AnimatePresence } from "motion/react"
 import * as motion from "motion/react-client"
@@ -11,8 +11,34 @@ import * as motion from "motion/react-client"
 export default function ProjectDetail() {
   const { slug } = useParams();
   const router = useRouter();
-  const projects = getProjects();
-  const project = projects.find((proj) => proj.slug === slug);
+  const [project, setProject] = useState<Project | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Start with sync data for immediate display
+    const syncProjects = getProjectsSync();
+    const foundProject = syncProjects.find((proj) => proj.slug === slug);
+    if (foundProject) {
+      setProject(foundProject);
+      setIsLoading(false);
+    }
+
+    // Try to fetch from Sanity if configured
+    // NEXT_PUBLIC_ variables are available in client components
+    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+    
+    if (projectId) {
+      getProjects().then((fetchedProjects) => {
+        const fetchedProject = fetchedProjects.find((proj) => proj.slug === slug);
+        if (fetchedProject) {
+          setProject(fetchedProject);
+        }
+        setIsLoading(false);
+      }).catch(() => {
+        setIsLoading(false);
+      });
+    }
+  }, [slug]);
 
   const tabs = [
     { label: "Overview", icon: "📄" },
@@ -25,6 +51,14 @@ export default function ProjectDetail() {
   useEffect(() => {
     setSelectedTab(tabs[0]);
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   if (!project) {
     return (
