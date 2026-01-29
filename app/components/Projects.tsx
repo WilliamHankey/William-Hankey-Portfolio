@@ -3,29 +3,28 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useTransition, useEffect, useState } from "react";
-import { getProjects, getProjectsSync, Project } from "../projects/[slug]/data";
+import { Project } from "../projects/[slug]/data";
 
 export default function Projects() {
   const [isPending, startTransition] = useTransition();
-  const [projects, setProjects] = useState<Project[]>(getProjectsSync());
-  const [isLoading, setIsLoading] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Try to fetch from Sanity if configured
-    // NEXT_PUBLIC_ variables are available in client components
-    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-    
-    if (projectId) {
-      setIsLoading(true);
-      getProjects().then((fetchedProjects) => {
-        if (fetchedProjects && fetchedProjects.length > 0) {
-          setProjects(fetchedProjects);
-        }
-        setIsLoading(false);
-      }).catch(() => {
+    fetch("/api/projects")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch projects");
+        return res.json();
+      })
+      .then((fetchedProjects: Project[]) => {
+        setProjects(fetchedProjects ?? []);
+      })
+      .catch(() => {
+        setProjects([]);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
-    }
   }, []);
 
   return (
@@ -36,7 +35,12 @@ export default function Projects() {
           Featured projects and case studies
         </div>
       </div>
-      {projects.map((project, index) => (
+      {isLoading ? (
+        <div className="flex justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      ) : (
+      projects.map((project, index) => (
         <Link 
           key={project.slug} 
           href={`/projects/${project.slug}`} 
@@ -64,7 +68,7 @@ export default function Projects() {
             </div>
             <div className="p-4 lg:p-8 w-full lg:w-1/2">
               <h2 className="text-xl lg:text-2xl font-semibold mb-2 group-hover:text-[#2C2B3E] transition-colors">{project.title}</h2>
-              <p className="text-gray-600 text-sm lg:text-base mb-4">{project.description}</p>
+              <p className="text-gray-600 text-sm lg:text-base mb-4">{project.description || project.shortOverview}</p>
               <div className="flex flex-wrap gap-3">
                 {project.icons.map((icon, index) => (
                   <i key={index} className={`${icon} text-xl lg:text-2xl text-gray-800`} />
@@ -73,7 +77,8 @@ export default function Projects() {
             </div>
           </div>
         </Link>
-      ))}
+      ))
+      )}
     </section>
   );
 }

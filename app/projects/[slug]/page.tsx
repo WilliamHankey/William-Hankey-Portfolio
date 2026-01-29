@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { getProjects, getProjectsSync, Project } from "./data";
+import { Project } from "./data";
 import Link from "next/link";
 import { AnimatePresence } from "motion/react"
 import * as motion from "motion/react-client"
@@ -15,29 +15,21 @@ export default function ProjectDetail() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Start with sync data for immediate display
-    const syncProjects = getProjectsSync();
-    const foundProject = syncProjects.find((proj) => proj.slug === slug);
-    if (foundProject) {
-      setProject(foundProject);
-      setIsLoading(false);
-    }
-
-    // Try to fetch from Sanity if configured
-    // NEXT_PUBLIC_ variables are available in client components
-    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-    
-    if (projectId) {
-      getProjects().then((fetchedProjects) => {
-        const fetchedProject = fetchedProjects.find((proj) => proj.slug === slug);
-        if (fetchedProject) {
-          setProject(fetchedProject);
-        }
-        setIsLoading(false);
-      }).catch(() => {
+    if (typeof slug !== "string") return;
+    fetch(`/api/projects/${encodeURIComponent(slug)}`)
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
+      .then((fetchedProject: Project | null) => {
+        setProject(fetchedProject ?? null);
+      })
+      .catch(() => {
+        setProject(null);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
-    }
   }, [slug]);
 
   const tabs = [
@@ -117,12 +109,17 @@ export default function ProjectDetail() {
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold mb-4">{project.title}</h1>
             <p className="text-gray-600 text-lg mb-6">
-              An advanced data platform for product growth and analytics.
+              {project.description || project.shortOverview}
             </p>
             <div className="flex flex-wrap gap-3 mb-6">
-              <span className="bg-blue-100 text-blue-700 text-sm px-3 py-1 rounded-full">Frontend</span>
-              <span className="bg-green-100 text-green-700 text-sm px-3 py-1 rounded-full">Project Management</span>
-              <span className="bg-purple-100 text-purple-700 text-sm px-3 py-1 rounded-full">Growth Analytics</span>
+              {project.techStack?.map((tech, index) => (
+                <span
+                  key={index}
+                  className="bg-blue-100 text-blue-700 text-sm px-3 py-1 rounded-full"
+                >
+                  {tech.name}
+                </span>
+              ))}
             </div>
             {project.link && (
               <Link 

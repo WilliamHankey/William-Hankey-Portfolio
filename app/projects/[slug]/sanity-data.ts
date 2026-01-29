@@ -1,14 +1,16 @@
 import { client } from '../../../lib/sanity';
 import { Project } from './data';
 
-// GROQ query to fetch all projects
+// GROQ query to fetch all projects from the "project" document type
 const projectsQuery = `*[_type == "project"] | order(_createdAt desc) {
   _id,
   "slug": slug.current,
   title,
   description,
+  shortOverview,
   "image": image.asset->url,
-  "link": liveUrl,
+  link,
+  icons,
   techStack,
   challenges,
   keyFeatures,
@@ -25,8 +27,10 @@ const projectBySlugQuery = `*[_type == "project" && slug.current == $slug][0] {
   "slug": slug.current,
   title,
   description,
+  shortOverview,
   "image": image.asset->url,
-  "link": liveUrl,
+  link,
+  icons,
   techStack,
   challenges,
   keyFeatures,
@@ -39,66 +43,68 @@ const projectBySlugQuery = `*[_type == "project" && slug.current == $slug][0] {
 
 // Transform Sanity data to match Project interface
 function transformSanityProject(sanityProject: any): Project {
-  // Transform challenges from string array to object array
-  const transformedChallenges = sanityProject.challenges?.map((challenge: string) => {
-    // Try to parse "Title: Description" format
-    const parts = challenge.split(':');
+  // Handle challenges: can be object array (schema) or string array (legacy)
+  const transformedChallenges = sanityProject.challenges?.map((challenge: any) => {
+    if (typeof challenge === 'object' && challenge?.title != null) {
+      return { title: challenge.title, description: challenge.description ?? '' };
+    }
+    const str = String(challenge);
+    const parts = str.split(':');
     if (parts.length >= 2) {
+      return { title: parts[0].trim(), description: parts.slice(1).join(':').trim() };
+    }
+    return { title: 'Challenge', description: str };
+  }) || [];
+
+  // Handle keyFeatures: can be object array (schema) or string array (legacy)
+  const transformedKeyFeatures = sanityProject.keyFeatures?.map((feature: any) => {
+    if (typeof feature === 'object' && feature?.text != null) {
+      return { icon: feature.icon ?? 'devicon-react-original', text: feature.text };
+    }
+    return { icon: 'devicon-react-original', text: String(feature) };
+  }) || [];
+
+  // Handle techStack: can be object array (schema) or string array (legacy)
+  const iconMap: Record<string, string> = {
+    'React.js': 'devicon-react-original',
+    'React': 'devicon-react-original',
+    'TypeScript': 'devicon-typescript-plain',
+    'Node.js': 'devicon-nodejs-plain',
+    'Express': 'devicon-express-original',
+    'Supabase': 'devicon-postgresql-plain',
+    'Next.js': 'devicon-nextjs-original',
+    'Angular': 'devicon-angularjs-plain',
+    'MongoDB': 'devicon-mongodb-plain',
+    'PostgreSQL': 'devicon-postgresql-plain',
+  };
+  const transformedTechStack = sanityProject.techStack?.map((tech: any) => {
+    if (typeof tech === 'object' && tech?.name != null) {
       return {
-        title: parts[0].trim(),
-        description: parts.slice(1).join(':').trim()
+        name: tech.name,
+        icon: tech.icon || iconMap[tech.name] || 'devicon-javascript-plain'
       };
     }
-    // Fallback: use entire string as description
-    return {
-      title: 'Challenge',
-      description: challenge
-    };
+    const name = String(tech).trim();
+    return { name, icon: iconMap[name] || 'devicon-javascript-plain' };
   }) || [];
 
-  // Transform keyFeatures from string array to object array
-  const transformedKeyFeatures = sanityProject.keyFeatures?.map((feature: string) => ({
-    icon: 'devicon-react-original', // Default icon, you can customize this
-    text: feature
-  })) || [];
-
-  // Transform techStack from string array to object array
-  const transformedTechStack = sanityProject.techStack?.map((tech: string) => {
-    // Map common tech names to icon classes
-    const iconMap: Record<string, string> = {
-      'React.js': 'devicon-react-original',
-      'React': 'devicon-react-original',
-      'TypeScript': 'devicon-typescript-plain',
-      'Node.js': 'devicon-nodejs-plain',
-      'Express': 'devicon-express-original',
-      'Supabase': 'devicon-postgresql-plain',
-      'Next.js': 'devicon-nextjs-original',
-      'Angular': 'devicon-angularjs-plain',
-      'MongoDB': 'devicon-mongodb-plain',
-      'PostgreSQL': 'devicon-postgresql-plain',
-    };
-    
-    return {
-      name: tech.trim(),
-      icon: iconMap[tech.trim()] || 'devicon-javascript-plain'
-    };
-  }) || [];
-
-  // Generate icons array from techStack for the project list view
-  const icons = transformedTechStack.slice(0, 2).map((tech: any) => tech.icon);
+  // Icons: use Sanity icons array if present, else first 2 from techStack
+  const icons = Array.isArray(sanityProject.icons) && sanityProject.icons.length > 0
+    ? sanityProject.icons
+    : transformedTechStack.slice(0, 2).map((t: { icon: string }) => t.icon);
 
   return {
-    slug: sanityProject.slug || '',
-    title: sanityProject.title || '',
-    description: sanityProject.description || '',
-    image: sanityProject.image || '',
-    icons: icons,
+    slug: sanityProject.slug ?? '',
+    title: sanityProject.title ?? '',
+    description: sanityProject.description ?? '',
+    image: sanityProject.image ?? '',
+    icons,
     link: sanityProject.link,
-    shortOverview: sanityProject.description || '', // Use description as shortOverview
+    shortOverview: sanityProject.shortOverview ?? sanityProject.description ?? '',
     techStack: transformedTechStack,
     challenges: transformedChallenges,
     keyFeatures: transformedKeyFeatures,
-    showcase: sanityProject.showcase || []
+    showcase: sanityProject.showcase ?? []
   };
 }
 
