@@ -109,22 +109,21 @@ function transformSanityProject(sanityProject: any): Project {
 }
 
 export async function getProjectsFromSanity(): Promise<Project[]> {
+  if (!client) return [];
   try {
     const sanityProjects = await client.fetch<any[]>(projectsQuery);
-    // Transform Sanity data to match Project interface
     return sanityProjects.map(transformSanityProject);
   } catch (error) {
     console.error('Error fetching projects from Sanity:', error);
-    // Fallback to empty array or handle error as needed
     return [];
   }
 }
 
 export async function getProjectBySlugFromSanity(slug: string): Promise<Project | null> {
+  if (!client) return null;
   try {
     const sanityProject = await client.fetch<any>(projectBySlugQuery, { slug });
     if (!sanityProject) return null;
-    // Transform Sanity data to match Project interface
     return transformSanityProject(sanityProject);
   } catch (error) {
     console.error(`Error fetching project ${slug} from Sanity:`, error);
