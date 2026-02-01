@@ -73,12 +73,11 @@ const socialLinks = [
               and end-to-end digital services.`}
             </p>
           </div>
-          <div className="px-4 lg:px-40">
-            <img src="/assets/company-logo.svg" alt="Company Logo" className="w-full max-w-md" />
+          <div className="px-4 lg:px-40 relative">
+            <img src="/assets/company-logo.svg" alt="Company Logo" className="w-full max-w-48 absolute bottom-8" />
           </div>
         </div>
         <div className="w-full lg:w-1/2 mt-8 lg:mt-0 relative">
-          <img src="/assets/hero.png" alt="Hero Image" className="w-full h-auto" />
           <div className="flex flex-row space-x-1 absolute bottom-8 right-9 ">
                 {socialLinks.map((link) => (
                     <a
@@ -123,20 +122,15 @@ const socialLinks = [
 
       </div>
        
-
-
-
-
-
-
         <motion.section
           ref={skillRef}
           initial={{ opacity: 0, y: 50 }}
           animate={skillInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="p-4 lg:p-10 bg-white shadow-lg mt-8 lg:mt-0 w-full"
+          className="p-4 lg:p-10 shadow-lg mt-8 lg:mt-0 w-full"
+          style={{background: '#F9FAFB'}}
         >
-          <div className="w-full">
+          <div className="w-full" >
             <Skills />
           </div>
         </motion.section>
