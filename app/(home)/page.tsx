@@ -60,9 +60,10 @@ const socialLinks = [
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <section className="lg:ml-20 pt-16 flex flex-col lg:flex-row flex-wrap justify-between relative">
-        <div className="w-full lg:w-1/2 flex flex-col justify-between">
-          <div className="p-4 lg:p-40">
+      <section className="lg:ml-20 pt-16 flex flex-col lg:flex-row flex-wrap justify-between relative background-image: url('/assets/hero.png')">
+      <div className="w-full flex flex-row justify-between background-image: url('/assets/hero.png')" style={{backgroundImage: "url('/assets/hero.png')", backgroundSize: "cover", backgroundPosition: "top", height: "95vh"}}>
+      <div className="w-full lg:w-1/2 flex flex-col justify-between background-image: url('/assets/hero.png')">
+          <div className="p-4 lg:p-40 text-white">
             <h1 className="mb-8 text-4xl lg:text-5xl font-semibold tracking-tighter">
               Hello, I'm William. Nice to meet you!
             </h1>
@@ -77,7 +78,7 @@ const socialLinks = [
           </div>
         </div>
         <div className="w-full lg:w-1/2 mt-8 lg:mt-0 relative">
-          <img src="/assets/heroImage.png" alt="Hero Image" className="w-full h-auto" />
+          <img src="/assets/hero.png" alt="Hero Image" className="w-full h-auto" />
           <div className="flex flex-row space-x-1 absolute bottom-8 right-9 ">
                 {socialLinks.map((link) => (
                     <a
@@ -120,12 +121,20 @@ const socialLinks = [
           </motion.button>
         </div>
 
+      </div>
+       
+
+
+
+
+
+
         <motion.section
           ref={skillRef}
           initial={{ opacity: 0, y: 50 }}
           animate={skillInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="p-4 lg:p-10 bg-white rounded-lg shadow-lg mt-8 lg:mt-0 w-full"
+          className="p-4 lg:p-10 bg-white shadow-lg mt-8 lg:mt-0 w-full"
         >
           <div className="w-full">
             <Skills />

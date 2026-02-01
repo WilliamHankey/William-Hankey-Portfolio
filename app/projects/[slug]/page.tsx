@@ -109,7 +109,7 @@ export default function ProjectDetail() {
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold mb-4">{project.title}</h1>
             <p className="text-gray-600 text-lg mb-6">
-              {project.description || project.shortOverview}
+              {project.description}
             </p>
             <div className="flex flex-wrap gap-3 mb-6">
               {project.techStack?.map((tech, index) => (
@@ -224,7 +224,7 @@ export default function ProjectDetail() {
                           src={item.image}
                           alt={item.title}
                           fill
-                          className="object-cover"
+                          className="object-contain"
                         />
                       </div>
                     </div>

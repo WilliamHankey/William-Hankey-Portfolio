@@ -30,7 +30,7 @@ const testimonials: Record<
 export default function Testimonials() {
   return (
     <section id="testimonials" className="bg-gray-100 flex flex-col justify-center items-center py-12 lg:py-24 px-4 lg:px-16">
-      <div className="rounded-md bg-gradient-to-tr from-slate-800 to-slate-700 py-0.5 px-2.5 border border-transparent text-sm text-white transition-all shadow-sm w-fit mb-4">
+      <div className="rounded-md bg-linear-to-tr from-slate-800 to-slate-700 py-0.5 px-2.5 border border-transparent text-sm text-white transition-all shadow-sm w-fit mb-4">
         Testimonials
       </div>
       <p className="text-center mb-8">Nice things people have to say about me.</p>

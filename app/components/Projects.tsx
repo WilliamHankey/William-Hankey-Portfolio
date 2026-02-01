@@ -68,7 +68,7 @@ export default function Projects() {
             </div>
             <div className="p-4 lg:p-8 w-full lg:w-1/2">
               <h2 className="text-xl lg:text-2xl font-semibold mb-2 group-hover:text-[#2C2B3E] transition-colors">{project.title}</h2>
-              <p className="text-gray-600 text-sm lg:text-base mb-4">{project.description || project.shortOverview}</p>
+              <p className="text-gray-600 text-sm lg:text-base mb-4">{project.description}</p>
               <div className="flex flex-wrap gap-3">
                 {project.icons.map((icon, index) => (
                   <i key={index} className={`${icon} text-xl lg:text-2xl text-gray-800`} />
