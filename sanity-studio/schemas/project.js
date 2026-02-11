@@ -58,6 +58,17 @@ export default defineType({
       description: 'Optional link to the live project',
     }),
     defineField({
+      name: 'themeColor',
+      title: 'Theme Color',
+      type: 'string',
+      description:
+        'Hex color used for accent elements like the "Visit Live Site" button (e.g. #2563eb).',
+      validation: (Rule) =>
+        Rule.regex(/^#([0-9A-Fa-f]{3}){1,2}$/, {
+          name: 'hex color',
+        }).warning('Use a valid hex color value like #2563eb'),
+    }),
+    defineField({
       name: 'techStack',
       title: 'Tech Stack',
       type: 'array',

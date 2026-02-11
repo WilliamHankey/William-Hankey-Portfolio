@@ -3,6 +3,7 @@ export interface Project {
   title: string;
   description: string;
   image: string;
+  themeColor?: string | null;
   icons: string[];
   link?: string;
   shortOverview: string;
