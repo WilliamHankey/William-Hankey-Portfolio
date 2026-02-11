@@ -5,8 +5,8 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { Project } from "./data";
 import Link from "next/link";
-import { AnimatePresence } from "motion/react"
-import * as motion from "motion/react-client"
+import { AnimatePresence } from "motion/react";
+import * as motion from "motion/react-client";
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -38,7 +38,10 @@ export default function ProjectDetail() {
     { label: "Tech", icon: "💻" },
   ];
 
-  const [selectedTab, setSelectedTab] = useState<{ label: string; icon: string } | null>(null);
+  const [selectedTab, setSelectedTab] = useState<{
+    label: string;
+    icon: string;
+  } | null>(null);
 
   useEffect(() => {
     setSelectedTab(tabs[0]);
@@ -70,7 +73,7 @@ export default function ProjectDetail() {
       <header className="relative">
         {/* Back Button */}
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.push("/")}
           className="fixed top-6 left-6 z-50 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           aria-label="Back to home"
         >
@@ -105,26 +108,38 @@ export default function ProjectDetail() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Project Info */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 gap-8 mb-12">
           <div>
-            <h1 className="text-3xl lg:text-4xl font-bold mb-4">{project.title}</h1>
-            <p className="text-gray-600 text-lg mb-6">
-              {project.description}
-            </p>
+            <h1 className="text-3xl lg:text-4xl font-bold mb-4">
+              {project.title}
+            </h1>
+            <p className="text-gray-600 text-lg mb-6">{project.description}</p>
             <div className="flex flex-wrap gap-3 mb-6">
               {project.techStack?.map((tech, index) => (
-                <span
+                <div
                   key={index}
-                  className="bg-blue-100 text-blue-700 text-sm px-3 py-1 rounded-full"
+                  className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm"
                 >
-                  {tech.name}
-                </span>
+                  <i className={`${tech.icon} text-2xl text-gray-700`} />
+                  <img
+                    src={tech.icon}
+                    alt={tech.name}
+                    style={{ width: 20, height: 20 }} // Apply consistent styling
+                    onError={(e) => {
+                      // Optional: Add a fallback if the image fails to load
+                      e.currentTarget.onerror = null; // prevents infinite loop
+                      // e.currentTarget.src = 'URL_OF_FALLBACK_ICON';
+                    }}
+                  />
+                  <span className="text-gray-600">{tech.name}</span>
+                </div>
               ))}
             </div>
+
             {project.link && (
-              <Link 
-                href={project.link} 
-                target="_blank" 
+              <Link
+                href={project.link}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
               >
@@ -135,18 +150,19 @@ export default function ProjectDetail() {
         </div>
 
         {/* Tabs Navigation */}
-        <div className="border-b border-gray-200 mb-8">
+        {/* <div className="border-b border-gray-200 mb-8">
           <nav className="flex flex-wrap -mb-px">
             {tabs.map((tab) => (
               <motion.button
                 key={tab.label}
                 initial={false}
                 animate={{
-                  backgroundColor: tab === selectedTab ? "#f3f4f6" : "transparent",
+                  backgroundColor:
+                    tab === selectedTab ? "#f3f4f6" : "transparent",
                 }}
                 className={`flex items-center px-4 py-2 text-sm font-medium rounded-t-lg ${
-                  tab === selectedTab 
-                    ? "text-blue-600 border-b-2 border-blue-600" 
+                  tab === selectedTab
+                    ? "text-blue-600 border-b-2 border-blue-600"
                     : "text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
                 onClick={() => setSelectedTab(tab)}
@@ -156,7 +172,7 @@ export default function ProjectDetail() {
               </motion.button>
             ))}
           </nav>
-        </div>
+        </div> */}
 
         {/* Tab Content */}
         <div className="prose prose-lg max-w-none">
@@ -171,18 +187,21 @@ export default function ProjectDetail() {
                 className="space-y-8"
               >
                 <section>
-                  <h2 className="text-2xl font-semibold mb-4">Project Overview</h2>
-                  <p className="text-gray-600">
-                    {project.shortOverview}
-                  </p>
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Project Overview
+                  </h2>
+                  <p className="text-gray-600">{project.shortOverview}</p>
                 </section>
 
                 <section>
-                  <h2 className="text-2xl font-semibold mb-4">Challenges & Solutions</h2>
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Challenges & Solutions
+                  </h2>
                   <ul className="list-disc list-inside space-y-3 text-gray-600">
                     {project.challenges.map((challenge, index) => (
                       <li key={index}>
-                        <strong>{challenge.title}</strong>: {challenge.description}
+                        <strong>{challenge.title}</strong>:{" "}
+                        {challenge.description}
                       </li>
                     ))}
                   </ul>
@@ -192,71 +211,49 @@ export default function ProjectDetail() {
                   <h2 className="text-2xl font-semibold mb-4">Key Features</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {project.keyFeatures.map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
-                        <i className={`${feature.icon} text-2xl text-gray-700`} />
+                      <div
+                        key={index}
+                        className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm"
+                      >
+                        <i
+                          className={`${feature.icon} text-2xl text-gray-700`}
+                        />
                         <span className="text-gray-600">{feature.text}</span>
                       </div>
                     ))}
                   </div>
                 </section>
-              </motion.div>
-            )}
 
-            {selectedTab?.label === "Showcase" && (
-              <motion.div
-                key="showcase"
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -10, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-16"
-              >
-                {project.showcase?.map((item, index) => (
-                  <section
-                    key={index}
-                    className={`flex flex-col ${
-                      index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                    } gap-8 items-center`}
-                  >
-                    <div className="w-full lg:w-1/2">
-                      <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg">
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
-                    </div>
-                    <div className="w-full lg:w-1/2">
-                      <h2 className="text-2xl font-semibold mb-4">{item.title}</h2>
-                      <p className="text-gray-600">{item.description}</p>
-                    </div>
-                  </section>
-                ))}
-              </motion.div>
-            )}
-
-            {selectedTab?.label === "Tech" && (
-              <motion.div
-                key="tech"
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -10, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <h2 className="text-2xl font-semibold mb-6">Tech Stack</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {project.techStack.map((tech, index) => (
-                    <div
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Project Showcase
+                  </h2>
+                  {project.showcase?.map((item, index) => (
+                    <section
                       key={index}
-                      className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm"
+                      className={`flex flex-col ${
+                        index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                      } gap-8 items-center`}
                     >
-                      <i className={`${tech.icon} text-2xl text-gray-700`} />
-                      <span className="text-gray-600">{tech.name}</span>
-                    </div>
+                      <div className="w-full lg:w-1/2">
+                        <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg">
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            className="object-contain"
+                          />
+                        </div>
+                      </div>
+                      <div className="w-full lg:w-1/2">
+                        <h2 className="text-2xl font-semibold mb-4">
+                          {item.title}
+                        </h2>
+                        <p className="text-gray-600">{item.description}</p>
+                      </div>
+                    </section>
                   ))}
-                </div>
+                </section>
               </motion.div>
             )}
           </AnimatePresence>
@@ -274,10 +271,10 @@ const container: React.CSSProperties = {
   background: "white",
   overflow: "hidden",
   boxShadow:
-      "0 1px 1px hsl(0deg 0% 0% / 0.075), 0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075), 0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075), 0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075), 0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075)",
+    "0 1px 1px hsl(0deg 0% 0% / 0.075), 0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075), 0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075), 0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075), 0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075)",
   display: "flex",
   flexDirection: "column",
-}
+};
 
 const nav: React.CSSProperties = {
   background: "#fdfdfd",
@@ -287,7 +284,7 @@ const nav: React.CSSProperties = {
   borderBottomRightRadius: 0,
   borderBottom: "1px solid #eeeeee",
   height: 44,
-}
+};
 
 const tabsStyles: React.CSSProperties = {
   listStyle: "none",
@@ -295,13 +292,13 @@ const tabsStyles: React.CSSProperties = {
   margin: 0,
   fontWeight: 500,
   fontSize: 14,
-}
+};
 
 const tabsContainer: React.CSSProperties = {
   ...tabsStyles,
   display: "flex",
   width: "100%",
-}
+};
 
 const tab: React.CSSProperties = {
   ...tabsStyles,
@@ -321,7 +318,7 @@ const tab: React.CSSProperties = {
   minWidth: 0,
   userSelect: "none",
   color: "#0f1115",
-}
+};
 
 const underline: React.CSSProperties = {
   position: "absolute",
@@ -330,15 +327,15 @@ const underline: React.CSSProperties = {
   right: 0,
   height: 2,
   background: "var(--accent)",
-}
+};
 
 const iconContainer: React.CSSProperties = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   flex: 1,
-}
+};
 
 const icon: React.CSSProperties = {
   fontSize: 128,
-}
+};
