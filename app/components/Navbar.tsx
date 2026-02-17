@@ -1,9 +1,9 @@
 "use client";
 
-import Link from 'next/link'
+import Link from "next/link";
 import Image from "next/image";
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type NavItem = {
   name: string;
@@ -15,13 +15,16 @@ const navItems: Record<string, NavItem> = {
   "/#work": { name: "Work" },
   "/#testimonials": { name: "Testimonials" },
   "/#contact": { name: "Contact" },
-  "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR": { name: "Download CV", isCta: true },
+  // "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR": { name: "Download CV", isCta: true },
 };
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleScroll = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
+  const handleScroll = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    id: string,
+  ) => {
     event.preventDefault();
     const section = document.getElementById(id);
     if (section) {
@@ -30,11 +33,14 @@ export function Navbar() {
     setIsMenuOpen(false);
   };
 
-  const handleDownload = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleDownload = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
     event.preventDefault();
-    const link = document.createElement('a');
-    link.href = "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR";
-    link.download = 'William_Hankey_CV.pdf';
+    const link = document.createElement("a");
+    link.href =
+      "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR";
+    link.download = "William_Hankey_CV.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -44,32 +50,70 @@ export function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-10">
       {/* Mobile Header */}
       <div className="lg:hidden flex items-center justify-between p-4 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-        <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
-        <button 
+        <Image
+          className="w-12"
+          src="/assets/wordmark.svg"
+          alt="Wordmark Logo"
+          width={48}
+          height={48}
+        />
+        <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="p-2 rounded-md hover:bg-gray-100"
           aria-label="Toggle menu"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             {isMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             )}
           </svg>
         </button>
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex fixed top-0 left-0 flex-col justify-between items-top flex-wrap shadow-md z-10 p-2" style={{height:"100vh", maxWidth:"4%"}}>
-        <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
+      <div
+        className="hidden lg:flex fixed top-0 left-0 flex-col justify-between items-top flex-wrap shadow-md z-10 p-2"
+        style={{ height: "100vh", maxWidth: "4%" }}
+      >
+        <Image
+          className="w-12"
+          src="/assets/wordmark.svg"
+          alt="Wordmark Logo"
+          width={48}
+          height={48}
+        />
         <div className="-rotate-90 text-center h-auto w-full text-nowrap content-center justify-center flex-wrap flex flex-col align-center">
-          <h1 className="text-2xl font-bold tracking-tighter">WILLIAM HANKEY</h1>
+          <h1 className="text-2xl font-bold tracking-tighter">
+            WILLIAM HANKEY
+          </h1>
           <p className="text-sm">PRODUCT ENGINNEER</p>
         </div>
-        <Image className="w-12" src="/assets/wordmark.svg" alt="Wordmark Logo" width={48} height={48} />
+        <Image
+          className="w-12"
+          src="/assets/wordmark.svg"
+          alt="Wordmark Logo"
+          width={48}
+          height={48}
+        />
       </div>
-      
+
       {/* Desktop Navigation */}
       <div className="hidden lg:flex flex-row space-x-0 p-3 fixed shadow-md w-full justify-end bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         {Object.entries(navItems).map(([path, { name, isCta = false }]) => {
@@ -89,8 +133,8 @@ export function Navbar() {
               href={path}
               onClick={handleDownload}
               className={`transition-all flex align-middle relative py-1 px-2 m-1 ${
-                isCta 
-                  ? "bg-[#2C2B3E] text-white rounded-md hover:bg-[#2C2B3E]/90" 
+                isCta
+                  ? "bg-[#2C2B3E] text-white rounded-md hover:bg-[#2C2B3E]/90"
                   : "hover:text-[#2C2B3E]"
               }`}
             >
@@ -121,19 +165,37 @@ export function Navbar() {
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-4 border-b">
                   <div className="flex items-center space-x-3">
-                    <Image className="w-8" src="/assets/wordmark.svg" alt="Wordmark Logo" width={32} height={32} />
+                    <Image
+                      className="w-8"
+                      src="/assets/wordmark.svg"
+                      alt="Wordmark Logo"
+                      width={32}
+                      height={32}
+                    />
                     <div>
-                      <h1 className="text-sm font-bold tracking-tighter">WILLIAM HANKEY</h1>
+                      <h1 className="text-sm font-bold tracking-tighter">
+                        WILLIAM HANKEY
+                      </h1>
                       <p className="text-xs text-gray-500">PRODUCT ENGINEER</p>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setIsMenuOpen(false)}
                     className="p-2 rounded-md hover:bg-gray-100"
                     aria-label="Close menu"
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -155,8 +217,8 @@ export function Navbar() {
                         href={path}
                         onClick={handleDownload}
                         className={`transition-all py-2 px-4 block ${
-                          isCta 
-                            ? "bg-[#2C2B3E] text-white rounded-md hover:bg-[#2C2B3E]/90" 
+                          isCta
+                            ? "bg-[#2C2B3E] text-white rounded-md hover:bg-[#2C2B3E]/90"
                             : "hover:text-[#2C2B3E]"
                         }`}
                       >

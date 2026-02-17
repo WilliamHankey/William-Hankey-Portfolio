@@ -17,24 +17,24 @@ const socialLinks = [
     hoverSrc: "https://s.magecdn.com/social/tc-linkedin.svg",
     link: "https://www.linkedin.com/in/williamhankey/"
   },
-  {
-    name: "Dribbble",
-    defaultSrc: "https://s.magecdn.com/social/mw-dribbble.svg",
-    hoverSrc: "https://s.magecdn.com/social/tc-dribbble.svg",
-    link: "https://dribbble.com/williamhankey"
-  },
-  {
-    name: "Behance",
-    defaultSrc: "https://s.magecdn.com/social/mw-behance.svg",
-    hoverSrc: "https://s.magecdn.com/social/tc-behance.svg",
-    link: "https://www.behance.net/amethHQ"
-  },
-  {
-    name: "Medium",
-    defaultSrc: "https://s.magecdn.com/social/mw-medium.svg",
-    hoverSrc: "https://s.magecdn.com/social/tc-medium.svg",
-    link: "https://medium.com/@wchankey15"
-  },
+  // {
+  //   name: "Dribbble",
+  //   defaultSrc: "https://s.magecdn.com/social/mw-dribbble.svg",
+  //   hoverSrc: "https://s.magecdn.com/social/tc-dribbble.svg",
+  //   link: "https://dribbble.com/williamhankey"
+  // },
+  // {
+  //   name: "Behance",
+  //   defaultSrc: "https://s.magecdn.com/social/mw-behance.svg",
+  //   hoverSrc: "https://s.magecdn.com/social/tc-behance.svg",
+  //   link: "https://www.behance.net/amethHQ"
+  // },
+  // {
+  //   name: "Medium",
+  //   defaultSrc: "https://s.magecdn.com/social/mw-medium.svg",
+  //   hoverSrc: "https://s.magecdn.com/social/tc-medium.svg",
+  //   link: "https://medium.com/@wchankey15"
+  // },
 ];
 
 export default function Footer() {
