@@ -173,13 +173,12 @@ export default function Home() {
         <motion.section
           ref={projectsRef}
           initial={{ opacity: 0, y: 50 }}
-          animate={projectsInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8 }}
           className="p-4 lg:p-10 bg-white rounded-lg shadow-lg mt-8 lg:mt-0"
         >
-          <div className="w-full">
-            <Projects />
-          </div>
+          <Projects />
         </motion.section>
 
         <div className="w-full mt-8 lg:mt-0">
