@@ -9,6 +9,23 @@ import Quote from "../components/Quote";
 import Testimonials from "../components/Testimonials";
 import Contact from "../components/Contact";
 import { useState } from "react";
+import { useSiteData } from "@/lib/use-site-data";
+import { getSocialIcons } from "@/lib/social-icons";
+
+// Fallback used until siteSettings is populated in Sanity.
+const FALLBACK_SOCIALS = [
+  {
+    name: "LinkedIn",
+    defaultSrc: "https://s.magecdn.com/social/mw-linkedin.svg",
+    hoverSrc: "https://s.magecdn.com/social/tc-linkedin.svg",
+    link: "https://www.linkedin.com/in/williamhankey/",
+  },
+];
+
+const FALLBACK_HERO_GREETING = "Hello, I'm William. Nice to meet you!";
+const FALLBACK_HERO_INTRO = `I'm currently the founder of MeiFlume, an all-in-one digital transformation company,
+leading strategic initiatives across bespoke software solutions, marketing efforts,
+and end-to-end digital services.`;
 
 export default function Home() {
   const { ref: skillRef, inView: skillInView } = useInView({
@@ -25,6 +42,11 @@ export default function Home() {
   });
 
   const [hovered, setHovered] = useState<string | null>(null);
+  const siteData = useSiteData();
+  const profile = siteData?.profile ?? null;
+
+  const heroGreeting = profile?.heroGreeting || FALLBACK_HERO_GREETING;
+  const heroIntro = profile?.heroIntro || FALLBACK_HERO_INTRO;
 
   const scrollToAbout = () => {
     const skillsSection = document.getElementById("skills");
@@ -33,32 +55,17 @@ export default function Home() {
     }
   };
 
-  const socialLinks = [
-    {
-      name: "LinkedIn",
-      defaultSrc: "https://s.magecdn.com/social/mw-linkedin.svg",
-      hoverSrc: "https://s.magecdn.com/social/tc-linkedin.svg",
-      link: "https://www.linkedin.com/in/williamhankey/",
-    },
-    // {
-    //   name: "Dribbble",
-    //   defaultSrc: "https://s.magecdn.com/social/mw-dribbble.svg",
-    //   hoverSrc: "https://s.magecdn.com/social/tc-dribbble.svg",
-    //   link: "https://dribbble.com/williamhankey"
-    // },
-    // {
-    //   name: "Behance",
-    //   defaultSrc: "https://s.magecdn.com/social/mw-behance.svg",
-    //   hoverSrc: "https://s.magecdn.com/social/tc-behance.svg",
-    //   link: "https://www.behance.net/amethHQ"
-    // },
-    // {
-    //   name: "Medium",
-    //   defaultSrc: "https://s.magecdn.com/social/mw-medium.svg",
-    //   hoverSrc: "https://s.magecdn.com/social/tc-medium.svg",
-    //   link: "https://medium.com/@wchankey15"
-    // }
-  ];
+  const socialLinks = siteData?.profile?.socials?.length
+    ? siteData.profile.socials.map((social) => {
+        const icons = getSocialIcons(social.platform);
+        return {
+          name: social.platform,
+          link: social.url,
+          defaultSrc: icons?.defaultSrc,
+          hoverSrc: icons?.hoverSrc,
+        };
+      })
+    : FALLBACK_SOCIALS;
 
   return (
     <motion.div
@@ -79,13 +86,9 @@ export default function Home() {
           <div className="w-full lg:w-1/2 flex flex-col justify-between background-image: url('/assets/hero.png')">
             <div className="p-4 lg:p-40 text-white">
               <h1 className="mb-8 text-4xl lg:text-5xl font-semibold tracking-tighter">
-                Hello, I'm William. Nice to meet you!
+                {heroGreeting}
               </h1>
-              <p className="mb-4">
-                {`I'm currently the founder of MeiFlume, an all-in-one digital transformation company, 
-              leading strategic initiatives across bespoke software solutions, marketing efforts, 
-              and end-to-end digital services.`}
-              </p>
+              <p className="mb-4">{heroIntro}</p>
             </div>
             <div className="px-4 lg:px-40 relative">
               <img

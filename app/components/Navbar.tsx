@@ -1,25 +1,35 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSiteData } from "@/lib/use-site-data";
 
 type NavItem = {
+  href: string;
   name: string;
   isCta?: boolean;
 };
 
-const navItems: Record<string, NavItem> = {
-  "/#about": { name: "About" },
-  "/#work": { name: "Work" },
-  "/#testimonials": { name: "Testimonials" },
-  "/#contact": { name: "Contact" },
-  // "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR": { name: "Download CV", isCta: true },
-};
+// Fallback used until siteSettings.cvUrl is set in Sanity.
+const DEFAULT_CV_URL =
+  "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR";
+
+const baseNavItems: NavItem[] = [
+  { href: "/#about", name: "About" },
+  { href: "/#work", name: "Work" },
+  { href: "/#testimonials", name: "Testimonials" },
+  { href: "/#contact", name: "Contact" },
+];
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const data = useSiteData();
+  const cvUrl = data?.profile?.cvUrl || DEFAULT_CV_URL;
+  const navItems: NavItem[] = [
+    ...baseNavItems,
+    { href: cvUrl, name: "Download CV", isCta: true },
+  ];
 
   const handleScroll = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -38,8 +48,7 @@ export function Navbar() {
   ) => {
     event.preventDefault();
     const link = document.createElement("a");
-    link.href =
-      "https://drive.google.com/uc?export=download&id=1zSE7aTNEI1nnSe23QChZzNKGYJFB5nCR";
+    link.href = cvUrl;
     link.download = "William_Hankey_CV.pdf";
     document.body.appendChild(link);
     link.click();
@@ -100,9 +109,7 @@ export function Navbar() {
           height={48}
         />
         <div className="-rotate-90 text-center h-auto w-full text-nowrap content-center justify-center flex-wrap flex flex-col align-center">
-          <h1 className="text-2xl font-bold tracking-tighter">
-            WILLIAM HANKEY
-          </h1>
+          <h1 className="text-2xl font-bold tracking-tighter">WILLIAM HANKEY</h1>
           <p className="text-sm">PRODUCT ENGINNEER</p>
         </div>
         <Image
@@ -116,21 +123,21 @@ export function Navbar() {
 
       {/* Desktop Navigation */}
       <div className="hidden lg:flex flex-row space-x-0 p-3 fixed shadow-md w-full justify-end bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-        {Object.entries(navItems).map(([path, { name, isCta = false }]) => {
-          const isInternal = path.startsWith("/#");
+        {navItems.map(({ href, name, isCta = false }) => {
+          const isInternal = href.startsWith("/#");
           return isInternal ? (
             <a
-              key={path}
-              href={path}
-              onClick={(e) => handleScroll(e, path.replace("/#", ""))}
+              key={href}
+              href={href}
+              onClick={(e) => handleScroll(e, href.replace("/#", ""))}
               className="transition-all hover:text-[#2C2B3E] flex align-middle relative py-1 px-2 m-1 cursor-pointer"
             >
               {name}
             </a>
           ) : (
             <a
-              key={path}
-              href={path}
+              key={href}
+              href={href}
               onClick={handleDownload}
               className={`transition-all flex align-middle relative py-1 px-2 m-1 ${
                 isCta
@@ -200,21 +207,21 @@ export function Navbar() {
                   </button>
                 </div>
                 <div className="flex-1 p-4 space-y-4">
-                  {Object.entries(navItems).map(([path, { name, isCta }]) => {
-                    const isInternal = path.startsWith("/#");
+                  {navItems.map(({ href, name, isCta }) => {
+                    const isInternal = href.startsWith("/#");
                     return isInternal ? (
                       <a
-                        key={path}
-                        href={path}
-                        onClick={(e) => handleScroll(e, path.replace("/#", ""))}
+                        key={href}
+                        href={href}
+                        onClick={(e) => handleScroll(e, href.replace("/#", ""))}
                         className="transition-all hover:text-[#2C2B3E] py-2 px-4 block"
                       >
                         {name}
                       </a>
                     ) : (
                       <a
-                        key={path}
-                        href={path}
+                        key={href}
+                        href={href}
                         onClick={handleDownload}
                         className={`transition-all py-2 px-4 block ${
                           isCta

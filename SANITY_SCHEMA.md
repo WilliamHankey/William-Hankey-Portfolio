@@ -202,3 +202,55 @@ export default defineType({
 - Slug fields use Sanity's slug type with `current` property
 - All array fields are optional but recommended for complete project data
 
+---
+
+# Site Content Schemas (Skills, Testimonials, Profile, Experience, Articles)
+
+The site pulls these sections dynamically from Sanity. Schema files live in `sanity-studio/schemas/` and are registered in `sanity-studio/schemas/index.js`.
+
+## Deploying the schemas
+
+```bash
+cd sanity-studio
+npm install        # if not already installed
+npm run deploy     # deploys the studio (host: wchportfolioadmin.sanity.studio)
+```
+
+After deploying, the new content types appear in the Sanity portal sidebar.
+
+## Content types
+
+| Type            | Document to create in the portal             | Where it renders                      |
+| --------------- | -------------------------------------------- | ------------------------------------- |
+| `siteSettings`  | ONE document (email, CV link, socials, about, hero, footer) | Hero, About, Navbar "Download CV", Footer |
+| `skill`         | One per technology (name + logo image)       | Skills grid                           |
+| `testimonial`   | One per quote (name, role, quote, photo)     | Testimonials grid                     |
+| `experience`    | One per job (role, company, period, bullets) | About → Experience column             |
+| `article`       | One per article (title, URL, source)         | About → Articles column               |
+
+## siteSettings fields
+
+- `name` – full name (footer copyright)
+- `role` – About badge, e.g. "Product Engineer & UX Strategist"
+- `heroGreeting` – hero headline, e.g. "Hello, I'm William. Nice to meet you!"
+- `heroIntro` – hero paragraph
+- `aboutMe` – array of paragraphs (one `<p>` each) for the About section
+- `footerAbout` – short bio in the footer "About Me" column
+- `email` – footer contact email
+- `location` – footer contact location
+- `cvUrl` – direct download URL used by the "Download CV" buttons (Google Drive/Dropbox/Sanity file asset URL)
+- `socials` – array of `{ platform, url }`; rendered in the hero and footer. Known platforms (LinkedIn, Dribbble, Behance, Medium, GitHub, X, Instagram, …) get standard icons; anything else shows the platform initial.
+
+> Tip: for a "Download CV" stored inside Sanity itself, upload the PDF as a file asset and paste the asset URL (`...api.sanity.io/files/...`) into `cvUrl`. No custom code needed.
+
+## Frontend data flow
+
+All sections share ONE cached request:
+
+1. Client components call `useSiteData()` (`lib/use-site-data.ts`)
+2. → `GET /api/site-data` (`app/api/site-data/route.ts`)
+3. → `getSiteData()` (`lib/site-data.ts`) runs the GROQ queries against Sanity server-side
+4. → components render Sanity data; if a section has no documents yet, they fall back to the previous hardcoded content
+
+The whole response is cached per page load, so the Skills, About, Testimonials, Navbar, Footer and hero only make a single request total.
+
