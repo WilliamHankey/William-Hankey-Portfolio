@@ -63,6 +63,20 @@ export interface SiteData {
 // GROQ queries
 // ---------------------------------------------------------------------------
 
+/**
+ * Extracts a raw URL from a logo value that may contain an <img> tag (e.g.
+ * `<img src="https://..." />` pasted into the portal), and repairs common
+ * paste artifacts such as a single-slash scheme (https:/x -> https://x).
+ */
+export function normalizeLogo(raw: string | null | undefined): string {
+  if (!raw) return '';
+  let value = raw.trim();
+  const match = value.match(/<img\s+[^>]*src=["']([^"']+)["']/i);
+  if (match) value = match[1];
+  value = value.replace(/^([a-z][a-z0-9+.-]*):\/([^/])/i, '$1://$2');
+  return value.trim();
+}
+
 const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   name,
   role,
@@ -130,7 +144,8 @@ export async function getProfile(): Promise<Profile | null> {
 export async function getSkills(): Promise<SkillItem[]> {
   if (!client) return [];
   try {
-    return await client.fetch<SkillItem[]>(skillsQuery);
+    const skills = await client.fetch<SkillItem[]>(skillsQuery);
+    return skills.map((skill) => ({ ...skill, logo: normalizeLogo(skill.logo) }));
   } catch (error) {
     console.error('Error fetching skills from Sanity:', error);
     return [];

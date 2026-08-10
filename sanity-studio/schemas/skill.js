@@ -21,8 +21,14 @@ export default defineType({
       type: 'url',
       description:
         'Direct link to the logo image (e.g. an https://cdn.simpleicons.org or https://cdn.jsdelivr.net/gh/devicons/devicon URL, or a local /assets/logos/... path).',
-      validation: (Rule) =>
+      validation: (Rule) => [
         Rule.required().uri({allowRelative: true}),
+        Rule.custom((value) =>
+          typeof value === 'string' && /[<>]/.test(value)
+            ? 'Paste the direct link only — no <img> tags'
+            : true
+        ),
+      ],
     }),
     defineField({
       name: 'order',

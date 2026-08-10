@@ -43,13 +43,18 @@ export default function Skills() {
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 lg:gap-8 justify-items-center">
           {skills.map((skill) => (
-            <div key={skill._id ?? skill.name} className="flex flex-col items-center gap-2">
-              <img
-                className="w-12 h-12 lg:w-20 lg:h-20"
-                src={skill.logo}
-                alt={skill.name}
-                title={skill.name}
-              />
+            <div
+              key={skill._id ?? skill.name}
+              className="flex flex-col items-center gap-2"
+            >
+              {skill.logo ? (
+                <img
+                  className="w-12 h-12 lg:w-20 lg:h-20"
+                  src={skill.logo}
+                  alt={skill.name}
+                  title={skill.name}
+                />
+              ) : null}
               <span className="text-xs text-gray-500">{skill.name}</span>
             </div>
           ))}
