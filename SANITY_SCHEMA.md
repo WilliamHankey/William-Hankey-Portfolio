@@ -223,7 +223,7 @@ After deploying, the new content types appear in the Sanity portal sidebar.
 | Type            | Document to create in the portal             | Where it renders                      |
 | --------------- | -------------------------------------------- | ------------------------------------- |
 | `siteSettings`  | ONE document (email, CV link, socials, about, hero, footer) | Hero, About, Navbar "Download CV", Footer |
-| `skill`         | One per technology (name + logo image)       | Skills grid                           |
+| `skill`         | One per technology (name + logo link)       | Skills grid                           |
 | `testimonial`   | One per quote (name, role, quote, photo)     | Testimonials grid                     |
 | `experience`    | One per job (role, company, period, bullets) | About → Experience column             |
 | `article`       | One per article (title, URL, source)         | About → Articles column               |

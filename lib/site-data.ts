@@ -82,7 +82,7 @@ const siteSettingsQuery = `*[_type == "siteSettings"][0] {
 const skillsQuery = `*[_type == "skill"] | order(order asc, _createdAt asc) {
   _id,
   name,
-  "logo": logo.asset->url,
+  logo,
   order
 }`;
 

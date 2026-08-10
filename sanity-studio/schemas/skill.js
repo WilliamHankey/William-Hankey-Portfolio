@@ -17,10 +17,12 @@ export default defineType({
     }),
     defineField({
       name: 'logo',
-      title: 'Logo',
-      type: 'image',
-      options: {hotspot: true},
-      description: 'Logo/image for the tech (SVG or PNG).',
+      title: 'Logo URL',
+      type: 'url',
+      description:
+        'Direct link to the logo image (e.g. an https://cdn.simpleicons.org or https://cdn.jsdelivr.net/gh/devicons/devicon URL, or a local /assets/logos/... path).',
+      validation: (Rule) =>
+        Rule.required().uri({allowRelative: true}),
     }),
     defineField({
       name: 'order',
@@ -33,7 +35,6 @@ export default defineType({
   preview: {
     select: {
       title: 'name',
-      media: 'logo',
     },
   },
 })
