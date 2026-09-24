@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -48,7 +49,14 @@ export default async function ProjectDetail({ params }: ProjectPageProps) {
   const hasShowcase = project.showcase.length > 0;
 
   return (
-    <div className={styles.page}>
+    <div
+      className={styles.page}
+      style={
+        {
+          "--project-accent": project.themeColor || "#298b7d",
+        } as CSSProperties
+      }
+    >
       <main className={styles.wrap}>
         <Link className={styles.back} href="/#work">
           <span aria-hidden="true">&larr;</span> Back to work
@@ -73,7 +81,7 @@ export default async function ProjectDetail({ params }: ProjectPageProps) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Visit live website <span aria-hidden="true">&nearr;</span>
+                Visit live website
               </a>
             )}
           </div>
@@ -196,7 +204,7 @@ export default async function ProjectDetail({ params }: ProjectPageProps) {
             <p>Let&apos;s make your next digital experience easier to use.</p>
           </div>
           <a className={styles.button} href={`mailto:${email}`}>
-            Get in touch <span aria-hidden="true">&nearr;</span>
+            Get in touch
           </a>
         </aside>
       </main>
