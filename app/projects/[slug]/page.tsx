@@ -1,342 +1,206 @@
-"use client";
-
-import { useState, useEffect } from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
-import { Project } from "./data";
 import Link from "next/link";
-import { AnimatePresence } from "motion/react";
-import * as motion from "motion/react-client";
+import { notFound } from "next/navigation";
+import { getProfile } from "@/lib/site-data";
+import { getProjectBySlug } from "./data";
+import styles from "./project-detail.module.css";
 
-export default function ProjectDetail() {
-  const { slug } = useParams();
-  const router = useRouter();
-  const [project, setProject] = useState<Project | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+type ProjectPageProps = {
+  params: Promise<{ slug: string }>;
+};
 
-  useEffect(() => {
-    if (typeof slug !== "string") return;
-    fetch(`/api/projects/${encodeURIComponent(slug)}`)
-      .then((res) => {
-        if (!res.ok) return null;
-        return res.json();
-      })
-      .then((fetchedProject: Project | null) => {
-        setProject(fetchedProject ?? null);
-      })
-      .catch(() => {
-        setProject(null);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [slug]);
+const fallbackEmail = "william@meiflume.com";
 
-  const tabs = [
-    { label: "Overview", icon: "📄" },
-    { label: "Showcase", icon: "🖼️" },
-    { label: "Tech", icon: "💻" },
-  ];
+export async function generateMetadata({
+  params,
+}: ProjectPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
 
-  const [selectedTab, setSelectedTab] = useState<{
-    label: string;
-    icon: string;
-  } | null>(null);
+  if (!project) return {};
 
-  useEffect(() => {
-    setSelectedTab(tabs[0]);
-  }, []);
+  return {
+    title: `${project.title} | William Hankey`,
+    description: project.description,
+    openGraph: {
+      title: project.title,
+      description: project.description,
+      images: project.image ? [project.image] : [],
+    },
+  };
+}
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
+export default async function ProjectDetail({ params }: ProjectPageProps) {
+  const { slug } = await params;
+  const [project, profile] = await Promise.all([
+    getProjectBySlug(slug),
+    getProfile(),
+  ]);
 
-  if (!project) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <h1 className="text-3xl font-bold text-red-500">Project Not Found</h1>
-      </div>
-    );
-  }
+  if (!project) notFound();
+
+  const email = profile?.email || fallbackEmail;
+  const eyebrow = project.techStack
+    .slice(0, 2)
+    .map((technology) => technology.name)
+    .join(" · ");
+  const hasShowcase = project.showcase.length > 0;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      {/* Header Section */}
-      <header className="relative">
-        {/* Back Button */}
-        <button
-          onClick={() => router.push("/")}
-          className="fixed top-6 left-6 z-50 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-          aria-label="Back to home"
-        >
-          <svg
-            className="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
-        </button>
+    <div className={styles.page}>
+      <main className={styles.wrap}>
+        <Link className={styles.back} href="/#work">
+          <span aria-hidden="true">&larr;</span> Back to work
+        </Link>
 
-        {/* Hero Image */}
-        <div className="relative h-[40vh] w-full">
-          <Image
-            src={project.image}
-            alt={project.title}
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Project Info */}
-        <div className="grid grid-cols-1 gap-8 mb-12">
-          <div>
-            <h1 className="text-3xl lg:text-4xl font-bold mb-4">
-              {project.title}
-            </h1>
-            <p className="text-gray-600 text-lg mb-6">{project.description}</p>
-            <div className="flex flex-wrap gap-3 mb-6">
-              {project.techStack?.map((tech, index) => (
-                <div
-                  key={index}
-                  className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm"
-                >
-                  <i className={`${tech.icon} text-2xl text-gray-700`} />
-                  <img
-                    src={tech.icon}
-                    alt={tech.name}
-                    style={{ width: 20, height: 20 }} // Apply consistent styling
-                    onError={(e) => {
-                      // Optional: Add a fallback if the image fails to load
-                      e.currentTarget.onerror = null; // prevents infinite loop
-                      // e.currentTarget.src = 'URL_OF_FALLBACK_ICON';
-                    }}
-                  />
-                  <span className="text-gray-600">{tech.name}</span>
-                </div>
-              ))}
-            </div>
-
+        <section className={styles.hero} aria-labelledby="project-title">
+          <div className={styles.heroCopy}>
+            <p className={styles.eyebrow}>{eyebrow || "Project case study"}</p>
+            <h1 id="project-title">{project.title}</h1>
+            <p className={styles.heroDescription}>{project.description}</p>
+            {project.techStack.length > 0 && (
+              <div className={styles.meta} aria-label="Project technologies">
+                {project.techStack.slice(0, 3).map((technology) => (
+                  <span key={technology.name}>{technology.name}</span>
+                ))}
+              </div>
+            )}
             {project.link && (
-              <Link
+              <a
+                className={styles.button}
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block text-white px-6 py-3 rounded-lg font-medium transition-colors hover:opacity-90"
-                style={{ backgroundColor: project.themeColor || "#2563eb" }}
               >
-                Visit Live Site
-              </Link>
+                Visit live website <span aria-hidden="true">&nearr;</span>
+              </a>
             )}
           </div>
-        </div>
 
-        {/* Tabs Navigation */}
-        {/* <div className="border-b border-gray-200 mb-8">
-          <nav className="flex flex-wrap -mb-px">
-            {tabs.map((tab) => (
-              <motion.button
-                key={tab.label}
-                initial={false}
-                animate={{
-                  backgroundColor:
-                    tab === selectedTab ? "#f3f4f6" : "transparent",
-                }}
-                className={`flex items-center px-4 py-2 text-sm font-medium rounded-t-lg ${
-                  tab === selectedTab
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-                onClick={() => setSelectedTab(tab)}
-              >
-                <span className="mr-2">{tab.icon}</span>
-                {tab.label}
-              </motion.button>
-            ))}
-          </nav>
-        </div> */}
+          <div className={styles.heroArt}>
+            {project.image && (
+              <Image
+                src={project.image}
+                alt={`${project.title} project cover`}
+                fill
+                className={styles.heroImage}
+                priority
+                sizes="(max-width: 760px) 100vw, 52vw"
+              />
+            )}
+          </div>
+        </section>
 
-        {/* Tab Content */}
-        <div className="prose prose-lg max-w-none">
-          <AnimatePresence mode="wait">
-            {selectedTab?.label === "Overview" && (
-              <motion.div
-                key="overview"
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -10, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-8"
-              >
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4">
-                    Project Overview
-                  </h2>
-                  <p className="text-gray-600">{project.shortOverview}</p>
-                </section>
+        <section id="overview" className={`${styles.section} ${styles.intro}`}>
+          <div>
+            <p className={styles.label}>01 / Overview</p>
+            <h2>From idea to impact.</h2>
+          </div>
+          <p className={styles.introCopy}>{project.shortOverview}</p>
+        </section>
 
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4">
-                    Challenges & Solutions
-                  </h2>
-                  <ul className="list-disc list-inside space-y-3 text-gray-600">
-                    {project.challenges.map((challenge, index) => (
-                      <li key={index}>
-                        <strong>{challenge.title}</strong>:{" "}
-                        {challenge.description}
-                      </li>
-                    ))}
-                  </ul>
-                </section>
+        {project.challenges.length > 0 && (
+          <section className={styles.section}>
+            <p className={styles.label}>02 / The approach</p>
+            <h2>The work behind the outcome.</h2>
+            <div className={styles.cards}>
+              {project.challenges.map((challenge, index) => (
+                <article className={styles.card} key={`${challenge.title}-${index}`}>
+                  <p className={styles.number}>
+                    {String(index + 1).padStart(2, "0")}
+                  </p>
+                  <h3>{challenge.title}</h3>
+                  <p>{challenge.description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4">Key Features</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {project.keyFeatures.map((feature, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm"
-                      >
-                        <i
-                          className={`${feature.icon} text-2xl text-gray-700`}
-                        />
-                        <span className="text-gray-600">{feature.text}</span>
+        {hasShowcase && (
+          <section id="work" className={styles.section}>
+            <div className={styles.showcaseHeading}>
+              <div>
+                <p className={styles.label}>03 / Selected screens</p>
+                <h2>Explore the project</h2>
+              </div>
+              <p>
+                A closer look at the key experiences and decisions that shaped
+                the final product.
+              </p>
+            </div>
+
+            <div className={styles.showcaseList}>
+              {project.showcase.map((item, index) => (
+                <article
+                  className={`${styles.feature} ${
+                    index % 2 === 1 ? styles.featureReverse : ""
+                  }`}
+                  key={`${item.title}-${index}`}
+                >
+                  <div className={styles.shot}>
+                    <div className={styles.browser}>
+                      <div className={styles.browserBar} aria-hidden="true">
+                        <b />
+                        <b />
+                        <b />
                       </div>
-                    ))}
-                  </div>
-                </section>
-
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4">
-                    Project Showcase
-                  </h2>
-                  {project.showcase?.map((item, index) => (
-                    <section
-                      key={index}
-                      className={`flex flex-col ${
-                        index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                      } gap-8 items-center`}
-                    >
-                      <div className="w-full lg:w-1/2">
-                        <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg">
+                      <div className={styles.screenshot}>
+                        {item.image && (
                           <Image
                             src={item.image}
                             alt={item.title}
                             fill
-                            className="object-contain"
+                            className={styles.showcaseImage}
+                            sizes="(max-width: 760px) 100vw, 57vw"
                           />
-                        </div>
+                        )}
                       </div>
-                      <div className="w-full lg:w-1/2">
-                        <h2 className="text-2xl font-semibold mb-4">
-                          {item.title}
-                        </h2>
-                        <p className="text-gray-600">{item.description}</p>
-                      </div>
-                    </section>
-                  ))}
-                </section>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                    </div>
+                  </div>
+                  <div className={styles.featureCopy}>
+                    <p className={styles.featureIndex}>
+                      {String(index + 1).padStart(2, "0")} / SCREEN
+                    </p>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {project.techStack.length > 0 && (
+          <section className={styles.section}>
+            <p className={styles.label}>
+              {hasShowcase ? "04" : "03"} / Under the hood
+            </p>
+            <h2>Built with the right tools for the job.</h2>
+            <p>
+              The technology stack supporting the experience, performance, and
+              ongoing evolution of the project.
+            </p>
+            <div className={styles.techList}>
+              {project.techStack.map((technology) => (
+                <span key={technology.name}>{technology.name}</span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <aside className={styles.cta}>
+          <div>
+            <h2>Have a project in mind?</h2>
+            <p>Let&apos;s make your next digital experience easier to use.</p>
+          </div>
+          <a className={styles.button} href={`mailto:${email}`}>
+            Get in touch <span aria-hidden="true">&nearr;</span>
+          </a>
+        </aside>
       </main>
-    </motion.div>
+
+    </div>
   );
 }
-
-const container: React.CSSProperties = {
-  width: 480,
-  height: "60vh",
-  maxHeight: 360,
-  borderRadius: 10,
-  background: "white",
-  overflow: "hidden",
-  boxShadow:
-    "0 1px 1px hsl(0deg 0% 0% / 0.075), 0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075), 0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075), 0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075), 0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075)",
-  display: "flex",
-  flexDirection: "column",
-};
-
-const nav: React.CSSProperties = {
-  background: "#fdfdfd",
-  padding: "5px 5px 0",
-  borderRadius: "10px",
-  borderBottomLeftRadius: 0,
-  borderBottomRightRadius: 0,
-  borderBottom: "1px solid #eeeeee",
-  height: 44,
-};
-
-const tabsStyles: React.CSSProperties = {
-  listStyle: "none",
-  padding: 0,
-  margin: 0,
-  fontWeight: 500,
-  fontSize: 14,
-};
-
-const tabsContainer: React.CSSProperties = {
-  ...tabsStyles,
-  display: "flex",
-  width: "100%",
-};
-
-const tab: React.CSSProperties = {
-  ...tabsStyles,
-  borderRadius: 5,
-  borderBottomLeftRadius: 0,
-  borderBottomRightRadius: 0,
-  width: "100%",
-  padding: "10px 15px",
-  position: "relative",
-  background: "white",
-  cursor: "pointer",
-  height: 24,
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  flex: 1,
-  minWidth: 0,
-  userSelect: "none",
-  color: "#0f1115",
-};
-
-const underline: React.CSSProperties = {
-  position: "absolute",
-  bottom: -2,
-  left: 0,
-  right: 0,
-  height: 2,
-  background: "var(--accent)",
-};
-
-const iconContainer: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  flex: 1,
-};
-
-const icon: React.CSSProperties = {
-  fontSize: 128,
-};
