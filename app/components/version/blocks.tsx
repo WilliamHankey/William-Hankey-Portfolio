@@ -29,10 +29,10 @@ export function StepList({
 }) {
   if (steps.length === 0) return null;
   return (
-    <ol className="grid gap-3.5" role="list">
+    <ol className="v-process-steps grid gap-3.5" role="list">
       {steps.map((step, index) => (
         <li key={index}>
-          <Card className="flex flex-col gap-2.5 p-4">
+          <Card className="flex h-full flex-col gap-2.5 p-4">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h3 className="v-h2 text-base">
                 <span className="v-muted mr-2 tabular-nums">{String(index + 1).padStart(2, "0")}</span>

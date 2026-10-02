@@ -20,7 +20,7 @@ export function Figure({
   return (
     <figure className="v-card m-0 flex flex-col overflow-hidden">
       <div
-        className="grid w-full place-items-center"
+        className="relative grid w-full place-items-center overflow-hidden"
         style={{
           aspectRatio: ratio,
           background: asset?.image ? "var(--shell-page-alt)" : "repeating-linear-gradient(45deg, #f6f6f8, #f6f6f8 10px, #eeeef2 10px, #eeeef2 20px)",
@@ -31,7 +31,7 @@ export function Figure({
           <img
             src={asset.image}
             alt={asset.title ?? asset.caption ?? ""}
-            className="h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
             loading="lazy"
           />
         ) : (

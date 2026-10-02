@@ -39,8 +39,8 @@ export function VersionHero({
 }) {
   const config = VERSIONS[version];
   return (
-    <Section className="pb-10 pt-12 md:pt-16">
-      <div className="grid items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+    <Section className="v-hero">
+      <div className="v-hero-grid">
         <div className="flex flex-col gap-5">
           <p className="v-eyebrow">{content.heroEyebrow}</p>
           <h1 className="v-display text-4xl md:text-5xl lg:text-6xl">{content.heroHeadline}</h1>
@@ -50,8 +50,8 @@ export function VersionHero({
             <ButtonLink href={versionPath(version, `/${config.collection}`)}>
               {content.heroCtaPrimary}
             </ButtonLink>
-            <ButtonLink href={versionPath(version, "/contact")} variant="ghost">
-              {content.heroCtaSecondary}
+            <ButtonLink href={contact.cvUrl || versionPath(version, "/contact")} variant="ghost" external={Boolean(contact.cvUrl)}>
+              {contact.cvUrl ? "Download résumé ↓" : content.heroCtaSecondary}
             </ButtonLink>
           </div>
 
@@ -62,25 +62,18 @@ export function VersionHero({
           ) : null}
         </div>
 
-        <div className="flex flex-col gap-3">
-          <Card className="p-5">
-            <p className="v-label">Role</p>
-            <p className="v-h2 mt-1.5 text-lg">{content.roleLong ?? config.roleLong}</p>
-            <p className="v-body mt-2 text-sm">{contact.location}</p>
-            <p className="v-body text-sm">
-              <a href={`mailto:${contact.email}`} className="v-link">
-                {contact.email}
-              </a>
-            </p>
-          </Card>
-          {content.heroImage ? (
-            <Figure asset={{ title: config.role, image: content.heroImage }} ratio="4 / 3" />
-          ) : null}
+        <div className="v-hero-visual">
+          <Figure asset={{ title: `${contact.name} — ${config.role}`, image: content.heroImage || "/assets/heroImage.png" }} ratio="4 / 3" />
+          <div className="v-hero-caption">
+            <span className="v-hero-caption-dot" aria-hidden="true" />
+            <div><p className="v-h2 text-sm">{content.roleLong ?? config.roleLong}</p><p className="v-body text-xs">{contact.location || "Thoughtful work. Measurable impact."}</p></div>
+            <span aria-hidden="true">↗</span>
+          </div>
         </div>
       </div>
 
       {content.heroMetrics.length > 0 ? (
-        <div className="pt-9">
+        <div className="v-hero-stats">
           <StatStrip metrics={content.heroMetrics} />
         </div>
       ) : null}

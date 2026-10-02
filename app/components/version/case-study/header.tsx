@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { PortfolioProject } from "@/lib/content/types";
 import { VERSIONS, versionPath, type VersionKey } from "@/lib/versions";
 
-import { ButtonLink, Card, Chip, KeyValueList, TagList } from "../primitives";
+import { ButtonLink, Chip, KeyValueList, TagList } from "../primitives";
 import { Figure } from "../media";
 
 /**
@@ -25,7 +25,7 @@ export function CaseStudyHeader({
 }) {
   const config = VERSIONS[version];
   return (
-    <div className="flex flex-col gap-5">
+    <div className="v-case-masthead flex flex-col gap-5">
       <nav aria-label="Breadcrumb" className="text-xs v-muted">
         <Link href={versionPath(version)} className="no-underline hover:underline">
           {config.label}
@@ -39,7 +39,7 @@ export function CaseStudyHeader({
         </Link>
       </nav>
 
-      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="grid items-center gap-6 lg:grid-cols-[1fr_1.1fr]">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center gap-1.5">
             {project.category ? <Chip variant="neutral">{project.category}</Chip> : null}
@@ -62,6 +62,7 @@ export function CaseStudyHeader({
               ← All {config.collection === "work" ? "work" : "projects"}
             </ButtonLink>
           </div>
+          {project.tags.length > 0 ? <TagList items={project.tags} /> : null}
         </div>
 
         <div className="flex flex-col gap-3">
@@ -69,16 +70,10 @@ export function CaseStudyHeader({
             asset={{ title: project.title, caption: project.summary, image: project.cover }}
             ratio="16 / 10"
           />
-          <Card className="p-4">
-            <KeyValueList items={meta} columns={1} />
-          </Card>
-          {project.tags.length > 0 ? (
-            <Card className="p-4">
-              <p className="v-label mb-2">Stack</p>
-              <TagList items={project.tags} />
-            </Card>
-          ) : null}
         </div>
+      </div>
+      <div className="v-case-meta">
+        <KeyValueList items={meta} columns={3} />
       </div>
     </div>
   );

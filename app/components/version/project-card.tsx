@@ -29,14 +29,13 @@ export function ProjectCard({
   const fe = project.fe;
   const ux = project.ux;
 
-  const summary = (pm?.summary ?? fe?.summary ?? ux?.summary) || project.summary;
+  const summary = (version === "pm" ? pm?.summary : version === "fe" ? fe?.summary : ux?.summary) || project.summary;
   // Only the UX case study carries a one-line outcome; the others use subtitle.
-  const subtitle = ux?.outcome || project.subtitle;
+  const subtitle = (version === "ux" ? ux?.outcome : undefined) || project.subtitle;
 
   return (
-    <Card as="article" className="flex h-full flex-col overflow-hidden">
-      <div
-        className="grid w-full place-items-center"
+    <Card as="article" className="v-project-card flex h-full flex-col overflow-hidden">
+      <Link href={href} aria-label={`View ${project.title} case study`} className="v-project-image"
         style={{
           aspectRatio: "16 / 9",
           background: project.cover
@@ -55,7 +54,7 @@ export function ProjectCard({
             {String(index + 1).padStart(2, "0")}
           </span>
         )}
-      </div>
+      </Link>
 
       <div className="flex flex-1 flex-col gap-2.5 p-4">
         <div className="flex flex-wrap items-center gap-1.5">

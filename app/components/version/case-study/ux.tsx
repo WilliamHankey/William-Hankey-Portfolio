@@ -27,7 +27,7 @@ import {
 
 function Sub({ index, title, children }: { index: string; title: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-3.5">
+    <div className="v-case-section flex flex-col gap-3.5">
       <div className="flex items-center gap-2.5">
         <span className="v-accent-bar" aria-hidden="true" />
         <h3 className="v-h2 text-lg">
@@ -41,7 +41,7 @@ function Sub({ index, title, children }: { index: string; title: string; childre
 }
 
 function Stack({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-col gap-8">{children}</div>;
+  return <div className="v-case-grid">{children}</div>;
 }
 
 const USABILITY_TONE = (status?: string) => (status === "negative" ? "danger" : "success");

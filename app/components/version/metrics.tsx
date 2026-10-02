@@ -59,7 +59,7 @@ export function MetricGrid({
 export function StatStrip({ metrics }: { metrics: VersionMetric[] }) {
   if (metrics.length === 0) return null;
   return (
-    <dl className="grid gap-4 border-t pt-6 sm:grid-cols-3" style={{ borderColor: "var(--shell-line)" }}>
+    <dl className="v-stat-strip">
       {metrics.map((metric, index) => (
         <div key={index} className="flex flex-col gap-1">
           <dt className="v-sr-only">{metric.label}</dt>
