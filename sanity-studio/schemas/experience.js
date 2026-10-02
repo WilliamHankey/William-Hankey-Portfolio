@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {versionField} from './fields/shared'
 
 /**
  * Experience — one job/role entry in the About → Experience column.
@@ -42,6 +43,7 @@ export default defineType({
       initialValue: 0,
       description: 'Lower numbers appear first (most recent first).',
     }),
+    versionField(),
   ],
   preview: {
     select: {

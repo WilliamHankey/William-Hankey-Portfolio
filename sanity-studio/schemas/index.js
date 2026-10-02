@@ -4,6 +4,7 @@ import skill from './skill'
 import testimonial from './testimonial'
 import experience from './experience'
 import article from './article'
+import certification from './certification'
 
 export default [
   project,
@@ -12,4 +13,5 @@ export default [
   testimonial,
   experience,
   article,
+  certification,
 ]

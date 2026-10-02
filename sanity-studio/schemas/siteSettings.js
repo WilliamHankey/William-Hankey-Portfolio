@@ -1,15 +1,39 @@
 import {defineType, defineField} from 'sanity'
+import {stringListField} from './fields/shared'
 
 /**
  * Site Settings / Profile — a single document holding the global portfolio info:
  * hero text, about-me paragraphs, email, CV download link, location and social links.
  * Create exactly ONE document of this type (name it "Site Settings").
+ *
+ * The global fields below are shared by every version. To vary the hero, process
+ * and section copy per role, add additional documents of this type and set their
+ * "Version" field — one for /pm, one for /fe, one for /ux. A document with
+ * "All versions" supplies the shared values.
  */
 export default defineType({
   name: 'siteSettings',
   title: 'Site Settings / Profile',
   type: 'document',
   fields: [
+    defineField({
+      name: 'version',
+      title: 'Version',
+      type: 'string',
+      description:
+        'Which portfolio this document configures. "All versions" holds the shared name, contact details and defaults.',
+      options: {
+        list: [
+          {title: 'All versions (shared)', value: 'all'},
+          {title: 'Project Manager (/pm)', value: 'pm'},
+          {title: 'Front-End Engineer (/fe)', value: 'fe'},
+          {title: 'UX/UI Designer (/ux)', value: 'ux'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'all',
+      validation: (Rule) => Rule.required(),
+    }),
     defineField({
       name: 'name',
       title: 'Name',
@@ -101,11 +125,190 @@ export default defineType({
       ],
       description: 'Social links shown in the hero and footer. Known platforms get their standard icon; others show the platform initial.',
     }),
+
+    /* ------------------------------------------------------------------
+       Per-version page content
+       ------------------------------------------------------------------ */
+    defineField({
+      name: 'variant',
+      title: 'Version page content',
+      type: 'object',
+      description:
+        'The copy for this version\'s landing page and its shared sections. Any field left empty falls back to the built-in sample content, so you can fill this in piece by piece.',
+      fields: [
+        defineField({
+          name: 'roleLong',
+          title: 'Role label',
+          type: 'string',
+          description: 'Long-form role title, e.g. "Project Manager & Scrum Master".',
+        }),
+        defineField({
+          name: 'heroEyebrow',
+          title: 'Hero eyebrow',
+          type: 'string',
+          description: 'Small label above the headline, e.g. "Project Management".',
+        }),
+        defineField({
+          name: 'heroHeadline',
+          title: 'Hero headline',
+          type: 'string',
+        }),
+        defineField({
+          name: 'heroIntro',
+          title: 'Hero intro',
+          type: 'text',
+          rows: 4,
+        }),
+        defineField({
+          name: 'heroCtaPrimary',
+          title: 'Primary button label',
+          type: 'string',
+        }),
+        defineField({
+          name: 'heroCtaSecondary',
+          title: 'Secondary button label',
+          type: 'string',
+        }),
+        defineField({
+          name: 'heroImage',
+          title: 'Hero image',
+          type: 'image',
+          options: {hotspot: true},
+        }),
+        defineField({
+          name: 'heroMetrics',
+          title: 'Hero credibility metrics',
+          type: 'array',
+          description: 'The stat strip directly beneath the hero. Two to four reads best.',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                defineField({
+                  name: 'value',
+                  title: 'Figure',
+                  type: 'string',
+                  description: 'Pre-formatted, e.g. "+28%" or "€1.2M".',
+                  validation: (Rule) => Rule.required(),
+                }),
+                defineField({name: 'label', title: 'Label', type: 'string'}),
+                defineField({
+                  name: 'note',
+                  title: 'Context',
+                  type: 'string',
+                  description: 'e.g. "over 6 months" or "across 3 releases".',
+                }),
+              ],
+              preview: {select: {title: 'value', subtitle: 'label'}},
+            },
+          ],
+        }),
+        defineField({
+          name: 'positioningNote',
+          title: 'Positioning note',
+          type: 'text',
+          rows: 3,
+          description: 'The short paragraph explaining how this role differs from the other two.',
+        }),
+        defineField({
+          name: 'featuredProjects',
+          title: 'Featured project slugs',
+          type: 'array',
+          of: [{type: 'string'}],
+          description: 'Project slugs to pin to the top, in order (e.g. "waddle-play").',
+        }),
+        defineField({
+          name: 'introBlocks',
+          title: 'Section intro blocks',
+          type: 'array',
+          description: 'Short section summaries rendered above the shared sections.',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                defineField({
+                  name: 'title',
+                  title: 'Title',
+                  type: 'string',
+                  validation: (Rule) => Rule.required(),
+                }),
+                defineField({name: 'description', title: 'Description', type: 'text', rows: 3}),
+              ],
+              preview: {select: {title: 'title', subtitle: 'description'}},
+            },
+          ],
+        }),
+        stringListField(
+          'skills',
+          'Skills',
+          'Groups shown in the Skills section, e.g. "Agile Delivery: Scrum, Kanban".'
+        ),
+        defineField({
+          name: 'process',
+          title: 'Process steps',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                defineField({
+                  name: 'title',
+                  title: 'Title',
+                  type: 'string',
+                  validation: (Rule) => Rule.required(),
+                }),
+                defineField({name: 'summary', title: 'Summary', type: 'string'}),
+                defineField({name: 'output', title: 'Output', type: 'string'}),
+                defineField({
+                  name: 'activities',
+                  title: 'Activities',
+                  type: 'array',
+                  of: [{type: 'string'}],
+                }),
+              ],
+              preview: {select: {title: 'title', subtitle: 'summary'}},
+            },
+          ],
+        }),
+        defineField({
+          name: 'about',
+          title: 'About paragraphs',
+          type: 'array',
+          of: [{type: 'text'}],
+          description: 'One paragraph per entry — each entry becomes a <p>.',
+        }),
+        defineField({
+          name: 'ctaHeading',
+          title: 'Closing CTA heading',
+          type: 'string',
+        }),
+        defineField({
+          name: 'ctaBody',
+          title: 'Closing CTA body',
+          type: 'text',
+          rows: 3,
+        }),
+        defineField({
+          name: 'seo',
+          title: 'SEO',
+          type: 'object',
+          fields: [
+            defineField({name: 'title', title: 'Meta title', type: 'string'}),
+            defineField({name: 'description', title: 'Meta description', type: 'text', rows: 3}),
+          ],
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {
       title: 'name',
-      subtitle: 'role',
+      role: 'role',
+      version: 'version',
     },
+    prepare: ({title, role, version}) => ({
+      title,
+      subtitle: `${role || 'No role set'} — ${version || 'all'}`,
+    }),
   },
 })

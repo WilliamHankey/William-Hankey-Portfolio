@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {versionField} from './fields/shared'
 
 /**
  * Skill — one technology/tool with its logo, shown in the Skills grid.
@@ -37,6 +38,7 @@ export default defineType({
       initialValue: 0,
       description: 'Lower numbers appear first in the Skills grid.',
     }),
+    versionField(),
   ],
   preview: {
     select: {

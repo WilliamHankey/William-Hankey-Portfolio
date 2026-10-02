@@ -1,34 +1,31 @@
-import { Metadata } from "next"
-import Footer from "./components/Footer"
-import { unstable_ViewTransition as ViewTransition } from "react"
+import type { Metadata } from "next";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
-  icons: {
-    icon: [
-      { url: '/assets/wordmark.svg', type: 'image/svg+xml' },
-    ],
-    shortcut: '/assets/wordmark.svg',
-    apple: '/assets/wordmark.svg',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://williamhankey.dev"),
+  title: {
+    default: "William Hankey",
+    template: "%s · William Hankey",
   },
-}
+  icons: {
+    icon: [{ url: "/assets/wordmark.svg", type: "image/svg+xml" }],
+    shortcut: "/assets/wordmark.svg",
+    apple: "/assets/wordmark.svg",
+  },
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+/**
+ * Root layout is intentionally bare.
+ *
+ * There is no general portfolio at the apex: each role lives at its own
+ * versioned route with its own shell, navigation and footer, so nothing that
+ * mixes the three roles is ever rendered.
+ */
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/tabs.js"></script>
-      </head>
-      <body suppressHydrationWarning={true} className="antialiased w-full lg:mx-auto">
-        <main className="flex-auto min-w-0 flex flex-col px-2 md:px-0">
-          {children}
-          <Footer />
-        </main>
-      </body>
+      <body className="antialiased w-full">{children}</body>
     </html>
-  )
+  );
 }

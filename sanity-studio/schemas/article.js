@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {versionField} from './fields/shared'
 
 /**
  * Article — a link to a published article/blog post, shown in the About → Articles column.
@@ -42,6 +43,7 @@ export default defineType({
       initialValue: 0,
       description: 'Lower numbers appear first.',
     }),
+    versionField(),
   ],
   preview: {
     select: {

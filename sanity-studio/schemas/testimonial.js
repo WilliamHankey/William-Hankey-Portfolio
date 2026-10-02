@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {versionField} from './fields/shared'
 
 /**
  * Testimonial — a quote about you, shown in the Testimonials grid.
@@ -41,6 +42,7 @@ export default defineType({
       initialValue: 0,
       description: 'Lower numbers appear first.',
     }),
+    versionField(),
   ],
   preview: {
     select: {

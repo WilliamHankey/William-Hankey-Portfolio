@@ -1,4 +1,8 @@
 import {defineType, defineField} from 'sanity'
+import {versionField} from './fields/shared'
+import {pmVariantFields} from './fields/pm'
+import {feVariantFields} from './fields/fe'
+import {uxVariantFields} from './fields/ux'
 
 export default defineType({
   name: 'project',
@@ -11,6 +15,29 @@ export default defineType({
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'subtitle',
+      title: 'Subtitle',
+      type: 'string',
+      description:
+        'One-line result statement shown under the title, e.g. "Cut checkout abandonment by 28% in eight weeks".',
+    }),
+    defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      description: 'Short grouping label used on cards, e.g. "Fintech", "Marketplace", "Internal Tool".',
+    }),
+    defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      initialValue: 0,
+      description: 'Lower numbers appear first on the projects page.',
+    }),
+    versionField(
+      'Which portfolio pages this project appears on. Leave empty to list it on all three versions.'
+    ),
     defineField({
       name: 'slug',
       title: 'Slug',
@@ -201,12 +228,85 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: 'variants',
+      title: 'Version case studies',
+      type: 'array',
+      description:
+        'One entry per portfolio version. The shared fields above (title, cover, tech stack, showcase) feed all three pages; this holds the version-specific narrative. Add an entry, pick its version, then fill in only that version\'s section — the other two stay empty.',
+      of: [
+        {
+          name: 'variant',
+          title: 'Version',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'version',
+              title: 'Version',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Project Manager (/pm)', value: 'pm'},
+                  {title: 'Front-End Engineer (/fe)', value: 'fe'},
+                  {title: 'UX/UI Designer (/ux)', value: 'ux'},
+                ],
+              },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'pm',
+              title: 'Project Manager case study',
+              type: 'object',
+              description:
+                'Rendered across the six /pm tabs: Overview, My Role, Approach, Outcomes, Artifacts, Learnings.',
+              fields: pmVariantFields,
+            }),
+            defineField({
+              name: 'fe',
+              title: 'Front-End Engineer case study',
+              type: 'object',
+              description:
+                'Rendered across the seven /fe tabs: Overview, Problem, Architecture, UX/UI, Performance, Results, Code Quality.',
+              fields: feVariantFields,
+            }),
+            defineField({
+              name: 'ux',
+              title: 'UX/UI Designer case study',
+              type: 'object',
+              description:
+                'Rendered across the seven /ux tabs: Overview, Problem, Process, UX, UI, Outcomes, Handoff.',
+              fields: uxVariantFields,
+            }),
+          ],
+          preview: {
+            select: {title: 'version', pm: 'pm.summary', fe: 'fe.summary', ux: 'ux.summary'},
+            prepare: ({title, pm, fe, ux}) => {
+              const filled = [
+                pm && 'PM',
+                fe && 'FE',
+                ux && 'UX',
+              ].filter(Boolean)
+              return {
+                title: title ? `${title.toUpperCase()} case study` : 'Unversioned case study',
+                subtitle: filled.length
+                  ? `Filled: ${filled.join(', ')}`
+                  : 'No version content yet',
+              }
+            },
+          },
+        },
+      ],
+    }),
   ],
   preview: {
     select: {
       title: 'title',
       media: 'image',
     },
+    prepare: ({title, media}) => ({
+      title,
+      media,
+    }),
   },
 })
 
