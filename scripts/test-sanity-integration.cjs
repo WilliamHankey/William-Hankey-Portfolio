@@ -79,6 +79,14 @@ async function live() {
   const pmProjects = await content.getProjects('pm');
   assert(!pmProjects.some(p => p.slug === 'waddle-play'), 'Unwritten PM case must not be listed');
   assert.equal(await content.getProjectBySlug('pm', 'reguhub'), null, 'Version visibility must apply to direct routes');
+  const testimonials = await content.getTestimonials('ux');
+  const testimonialSources = await client.fetch('*[_type=="testimonial" && (!defined(versions) || "ux" in versions)]{name, "photo":photo.asset->url}');
+  for (const quote of testimonials) {
+    const source = testimonialSources.find(item => item.name === quote.name);
+    assert.equal(quote.photo, source.photo || null, 'Testimonial photo must resolve from Sanity');
+  }
+  assert(!fs.readFileSync(path.join(root, 'app/components/version/navigation.tsx'), 'utf8').includes('v-version-switch'));
+  console.log('PASS: published testimonial avatars and no version-switch UI');
   const inventory = await client.fetch('*[_type=="project"]{ "slug":slug.current, "versions":variants[].version }');
   let count = 0;
   for (const item of inventory) for (const version of item.versions || []) {

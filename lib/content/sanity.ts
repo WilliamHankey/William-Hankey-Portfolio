@@ -372,7 +372,8 @@ const testimonialsQuery = `*[_type == "testimonial"
   && (!defined(versions) || $version in versions)] | order(order asc, _createdAt asc) {
   name,
   role,
-  quote
+  quote,
+  "photo": photo.asset->url
 }`;
 
 const certificationsQuery = `*[_type == "certification"
@@ -660,6 +661,7 @@ export async function getTestimonials(
       quote: str(item.quote),
       name: str(item.name, "Client"),
       role: str(item.role),
+      photo: str(item.photo) || null,
     }));
 }
 

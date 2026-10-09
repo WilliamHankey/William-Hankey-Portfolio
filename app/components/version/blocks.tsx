@@ -1,6 +1,5 @@
 import type {
   Person,
-  Quote,
   Step,
   TableBlock,
   Tone,
@@ -174,22 +173,7 @@ export function PeopleGrid({ people }: { people: Person[] }) {
   );
 }
 
-export function QuoteCard({ quote, dark = false }: { quote?: Quote; dark?: boolean }) {
-  if (!quote?.quote) return null;
-  return (
-    <figure
-      className={`m-0 flex flex-col gap-3 p-5 ${dark ? "v-panel-dark" : "v-panel"}`}
-    >
-      <blockquote className="v-lede m-0" style={dark ? { color: "#fff" } : undefined}>
-        “{quote.quote}”
-      </blockquote>
-      <figcaption className="v-metric-note" style={dark ? { color: "rgba(255,255,255,0.75)" } : undefined}>
-        <span className="font-semibold">{quote.name}</span>
-        {quote.role ? ` — ${quote.role}` : null}
-      </figcaption>
-    </figure>
-  );
-}
+export { QuoteCard } from "./testimonial";
 
 export function PersonaGrid({ personas }: { personas: UxPersona[] }) {
   if (personas.length === 0) return null;

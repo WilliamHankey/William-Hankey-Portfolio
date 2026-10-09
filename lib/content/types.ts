@@ -38,6 +38,7 @@ export type Quote = {
   quote: string;
   name: string;
   role?: string;
+  photo?: string | null;
 };
 
 export type TreeNode = {

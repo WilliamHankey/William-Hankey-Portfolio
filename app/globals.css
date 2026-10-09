@@ -836,16 +836,18 @@ html { scroll-behavior: smooth; scroll-padding-top: 88px; }
 .v-nav-link::after { content: ''; position: absolute; bottom: 0; left: 12px; right: 12px; height: 2px; background: var(--v-accent); transform: scaleX(0); transition: transform .2s ease; }
 .v-nav-link:hover, .v-nav-link[aria-current='page'] { color: var(--v-accent); }
 .v-nav-link[aria-current='page']::after, .v-nav-link:hover::after { transform: scaleX(1); }
-.v-version-switch { display: flex; gap: 3px; padding: 3px; border: 1px solid var(--shell-line); border-radius: 8px; }
-.v-version-switch a { display: grid; place-items: center; min-width: 32px; min-height: 34px; border-radius: 5px; font-size: 11px; font-weight: 700; color: var(--shell-ink-soft); text-decoration: none; transition: background .2s, color .2s; }
-.v-version-switch a[aria-current='page'] { color: white; background: var(--v-accent); }
+.v-testimonial-quote { line-height: 1.6; }
+.v-testimonial-clamped { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.v-testimonial-toggle { color: var(--v-accent); font-size: .875rem; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 44px; }
+.v-testimonial-toggle:focus-visible { outline: 2px solid var(--v-accent); outline-offset: 3px; border-radius: 2px; }
+.v-testimonial-avatar { width: 48px; height: 48px; flex-shrink: 0; border-radius: 50%; object-fit: cover; }
+.v-testimonial-initials { display: grid; place-items: center; color: var(--v-accent); background: var(--shell-page-alt); font-size: .875rem; font-weight: 700; }
 .v-nav-resume { min-height: 44px; white-space: nowrap; }
 .v-menu-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(9,31,35,.45); backdrop-filter: blur(4px); animation: v-fade-in .2s ease both; }
 .v-menu-drawer { position: absolute; inset: 0 0 0 auto; width: min(360px, 90vw); padding: 24px; overflow-y: auto; background: white; display: flex; flex-direction: column; gap: 24px; box-shadow: -12px 0 50px #09232b30; animation: v-drawer-in .3s cubic-bezier(.2,.8,.2,1) both; }
 .v-menu-heading { display: flex; align-items: center; gap: 10px; font-size: 14px; }
 .v-menu-heading button { margin-left: auto; min-width: 44px; min-height: 44px; font-size: 28px; cursor: pointer; }
-.v-menu-drawer > nav:not(.v-version-switch) { display: flex; flex-direction: column; gap: 6px; }
-.v-menu-drawer .v-version-switch { align-self: flex-start; }
+.v-menu-drawer > nav { display: flex; flex-direction: column; gap: 6px; }
 .v-menu-drawer .v-nav-link { font-size: 16px; }
 .v-menu-drawer .v-nav-resume { margin-top: auto; }
 @media (min-width: 1024px) {
