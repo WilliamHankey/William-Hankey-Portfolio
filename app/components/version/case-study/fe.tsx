@@ -285,17 +285,18 @@ export function buildFePanels(fe: FeCaseStudy): Record<string, React.ReactNode> 
           </Sub>
         ) : null}
 
-        {fe.bundle.segments.length > 0 || fe.bundle.after > 0 ? (
+        {fe.bundle && typeof fe.bundle.after === "number" && (fe.bundle.segments.length > 0 || fe.bundle.after > 0) ? (
           <Sub index="05" title="Bundle size">
             <Card className="flex flex-col gap-3.5 p-4">
               <div className="flex flex-wrap items-baseline gap-3">
-                <span className="v-muted text-sm line-through tabular-nums">
-                  {fe.bundle.before}
-                  {fe.bundle.unit}
-                </span>
-                <span className="text-gray-400" aria-hidden="true">
-                  →
-                </span>
+                {typeof fe.bundle.before === "number" ? (
+                  <>
+                    <span className="v-muted text-sm line-through tabular-nums">
+                      {fe.bundle.before}{fe.bundle.unit}
+                    </span>
+                    <span className="text-gray-400" aria-hidden="true">→</span>
+                  </>
+                ) : null}
                 <span className="v-metric-value" style={{ fontSize: "1.6rem" }}>
                   {fe.bundle.after}
                   {fe.bundle.unit}

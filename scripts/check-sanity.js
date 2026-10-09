@@ -34,9 +34,9 @@ function loadEnv() {
   }
 }
 
-const env = loadEnv();
+const env = { ...loadEnv(), ...process.env };
 const projectId = env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = env.NEXT_PUBLIC_SANITY_DATASET || 'production';
+const dataset = env.NEXT_PUBLIC_SANITY_DATASET || 'portfolio';
 const apiVersion = env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01';
 const token = env.SANITY_API_READ_TOKEN;
 
@@ -51,7 +51,7 @@ console.log(`Project ID: ${projectId}`);
 console.log(`Dataset: ${dataset}`);
 console.log(`API Version: ${apiVersion}`);
 if (token) {
-  console.log(`Token: ${token.substring(0, 10)}... (hidden)`);
+  console.log('Read token configured (value not logged)');
 }
 console.log('');
 

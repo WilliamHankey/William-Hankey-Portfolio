@@ -291,9 +291,9 @@ export type FeCaseStudy = {
   coreWebVitals: Metric[];
   beforeAfter: FeMetricComparison[];
   optimizations: TitledPoints[];
-  bundle: {
-    before: number;
-    after: number;
+  bundle?: {
+    before?: number;
+    after?: number;
     unit: string;
     segments: FeBundleSegment[];
   };

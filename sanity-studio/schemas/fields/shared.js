@@ -150,7 +150,7 @@ export const tableField = (name, title, { columnCount = 4, description } = {}) =
         title: 'Column headings',
         type: 'array',
         of: [{ type: 'string' }],
-        validation: (Rule) => Rule.length(columnCount),
+        ...(columnCount == null ? {} : { validation: (Rule) => Rule.length(columnCount) }),
       },
       {
         name: 'rows',
@@ -165,8 +165,10 @@ export const tableField = (name, title, { columnCount = 4, description } = {}) =
                 title: 'Cells',
                 type: 'array',
                 of: [{ type: 'string' }],
-                description: `One entry per column heading (${columnCount}).`,
-                validation: (Rule) => Rule.length(columnCount),
+                description: columnCount == null
+                  ? 'One entry per column heading.'
+                  : `One entry per column heading (${columnCount}).`,
+                ...(columnCount == null ? {} : { validation: (Rule) => Rule.length(columnCount) }),
               },
             ],
             preview: {

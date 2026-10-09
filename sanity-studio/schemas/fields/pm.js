@@ -77,7 +77,7 @@ export const pmVariantFields = [
     fields: [
       { name: 'framework', title: 'Framework', type: 'string', description: 'e.g. RICE, MoSCoW, WSJF' },
       { name: 'description', title: 'How it was applied', type: 'text', rows: 4 },
-      tableField('table', 'Sample prioritisation table', { columnCount: 6 }),
+      tableField('table', 'Sample prioritisation table', { columnCount: null }),
     ],
   }),
   stringListField('risks', 'Risk & dependency considerations'),

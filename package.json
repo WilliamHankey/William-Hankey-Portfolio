@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "check-sanity": "node scripts/check-sanity.js"
+    "check-sanity": "node scripts/check-sanity.js",
+    "test:sanity": "node scripts/test-sanity-integration.cjs",
+    "test:sanity:live": "node scripts/test-sanity-integration.cjs --live"
   },
   "dependencies": {
     "@sanity/client": "^7.13.2",

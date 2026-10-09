@@ -1,4 +1,5 @@
 import { client } from "@/lib/sanity";
+import { normalizeCaseStudy } from "./normalize";
 import { FALLBACK_PROJECTS, FALLBACK_SITE, fallbackProject } from "./fallbacks";
 import type {
   FeCaseStudy,
@@ -48,10 +49,10 @@ const STEP = `{
 }`;
 
 /** A TableBlock is stored as caption + columns + rows[{ cells }]. */
-const TABLE = (path: string) => `{
+const TABLE = (path: string) => `${path} {
   caption,
   columns,
-  "rows": ${path}.rows[]{ "cells": cells }
+  "rows": rows[]{ cells }
 }`;
 
 const TITLED_POINTS = `{
@@ -92,10 +93,10 @@ const PM_PROJECTION = `{
   prioritization {
     framework,
     description,
-    "table": {
+    "table": table {
       caption,
       columns,
-      "rows": table.rows[]{ "cells": cells }
+      "rows": rows[]{ cells }
     }
   },
   risks,
@@ -275,7 +276,7 @@ const UX_PROJECTION = `{
   "finalScreens": finalScreens[] ${ASSET},
   "outcomeMetrics": outcomeMetrics[] ${METRIC},
   "outcomeGroups": outcomeGroups[] ${TITLED_POINTS},
-  "outcomeCompare": {
+  "outcomeCompare": outcomeCompare {
     title,
     "before": before ${ASSET},
     "after": after ${ASSET}
@@ -314,7 +315,8 @@ const projectsQuery = `*[_type == "project"
   }
 }`;
 
-const projectBySlugQuery = `*[_type == "project" && slug.current == $slug][0] {
+const projectBySlugQuery = `*[_type == "project" && slug.current == $slug
+  && (!defined(versions) || $version in versions)][0] {
   title,
   "slug": slug.current,
   subtitle,
@@ -450,14 +452,9 @@ function metricArray(value: unknown, fallback: Metric[] = []): Metric[] {
    ========================================================================== */
 
 /**
- * Merges a Sanity project document with the local sample case study for the
- * same slug and version.
- *
- * The base fields (title, cover, description, tech stack) always come from
- * Sanity when the document exists, so editing content in the Studio updates
- * every version. The deep per-version tab content comes from the published
- * `variant` when present, otherwise from the local sample object, so the
- * layouts are always demonstrable.
+ * Hydrates a published variant with safe empty UI shapes. Missing CMS case
+ * studies are never replaced by sample claims when Sanity is configured.
+ * Local samples are available only in explicitly unconfigured demo mode.
  */
 function hydrate(
   version: VersionKey,
@@ -465,14 +462,14 @@ function hydrate(
 ): PortfolioProject {
   const local = fallbackProject(version, doc.slug ?? "");
   const variant = doc.variant ?? null;
-  const source = (variant?.[version] ?? local?.[version] ?? null) as
+  const source = (variant?.[version] ?? (!client ? local?.[version] : null) ?? null) as
     | PmCaseStudy
     | FeCaseStudy
     | UxCaseStudy
     | null;
   // Copy before appending: `source` may be the shared module-level fallback
   // object, and mutating it would accumulate showcase images across requests.
-  let caseStudy = source ? { ...source } : null;
+  let caseStudy = source ? normalizeCaseStudy(version, source) : null;
 
   const summary = str(doc.description, str(local?.summary));
 
@@ -489,7 +486,7 @@ function hydrate(
       doc.techStack && doc.techStack.length > 0
         ? doc.techStack.map((item) => str(item.name)).filter(Boolean)
         : (local?.tags ?? []),
-    isPlaceholder: !variant,
+    isPlaceholder: !variant?.[version],
   };
 
   // Showcase images from Sanity enrich the FE "screenshots" and UX output
@@ -530,7 +527,7 @@ function hydrate(
 async function fetchSanity<T>(query: string, params: Record<string, string>): Promise<T | null> {
   if (!client) return null;
   try {
-    return await client.fetch<T>(query, params);
+    return await client.fetch<T>(query, params, { next: { revalidate: 60 } });
   } catch (error) {
     console.error("Sanity fetch failed:", error);
     return null;
@@ -540,13 +537,14 @@ async function fetchSanity<T>(query: string, params: Record<string, string>): Pr
 /**
  * All projects visible on a version's projects page.
  *
- * Sanity projects come first (in Studio `order`), then any local sample case
- * study whose slug is not present in Sanity, so a version always has content
- * while the Studio is being populated.
+ * With Sanity configured, only authored variants are listed. Local samples
+ * are reserved for unconfigured demo mode, not missing or failed CMS reads.
  */
 export async function getProjects(version: VersionKey): Promise<PortfolioProject[]> {
   const docs = await fetchSanity<SanityProject[]>(projectsQuery, { version });
-  const fromSanity = (docs ?? []).filter((doc) => doc.slug).map((doc) => hydrate(version, doc));
+  const fromSanity = (docs ?? []).filter((doc) => doc.slug).map((doc) => hydrate(version, doc))
+    .filter((project) => Boolean(project[version]));
+  if (client) return fromSanity;
   const seen = new Set(fromSanity.map((project) => project.slug));
 
   const localOnly = FALLBACK_PROJECTS[version]
@@ -566,7 +564,7 @@ export async function getProjectBySlug(
 ): Promise<PortfolioProject | null> {
   const doc = await fetchSanity<SanityProject | null>(projectBySlugQuery, { version, slug });
   if (doc) return hydrate(version, doc);
-  return fallbackProject(version, slug);
+  return client ? null : fallbackProject(version, slug);
 }
 
 export async function getFeaturedProjects(version: VersionKey): Promise<PortfolioProject[]> {
